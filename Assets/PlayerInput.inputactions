@@ -7,110 +7,229 @@
             "id": "a045cbc5-8e55-4fdc-a61e-9164ac771031",
             "actions": [
                 {
-                    "name": "Move (WASD)",
-                    "type": "Button",
+                    "name": "Move",
+                    "type": "Value",
                     "id": "b5039107-4700-4395-9fa6-f557977baa32",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "9ccb98e7-d3fa-4d12-b5ab-3bdfd3becee6",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate",
-                    "type": "Button",
-                    "id": "0eb652a1-3cf5-46d7-81e9-c40e6fc5d206",
-                    "expectedControlType": "",
+                    "type": "Value",
+                    "id": "db782da9-0144-468f-adb8-97e318035fad",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "fe4ab01b-f2b6-44d4-b47c-5e8bf8d65785",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Jump/Crouch",
+                    "type": "Value",
+                    "id": "edfaf370-59de-4386-9b89-7d86e4f77426",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "5308b835-8961-4c71-92c0-ba874a3e6379",
+                    "name": "WASD",
+                    "id": "98cb89ad-6221-4ef6-8b84-99c7a7140b72",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "a9c7e2a6-0532-4021-8e60-fb40c8669b23",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move (WASD)",
+                    "action": "Move",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "3e50ed95-347b-48a0-83a1-7068171f6403",
+                    "name": "down",
+                    "id": "435e2109-492f-48c1-a60a-ea3532a3da7b",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move (WASD)",
+                    "action": "Move",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "f8f06a73-9fc5-4c75-bbd9-28f47c7ff86d",
+                    "name": "left",
+                    "id": "6b3b6512-dd42-48bb-a217-b84b4d7613d2",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move (WASD)",
+                    "action": "Move",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "2d01c605-8fc0-4da5-bea8-ae818ee6bfcb",
+                    "name": "right",
+                    "id": "07f38742-4983-45ff-80bf-7f24c93d7d2a",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move (WASD)",
+                    "action": "Move",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "25d06653-81fd-4503-b55a-5270cb3b67d2",
-                    "path": "<Keyboard>/space",
+                    "name": "ArrowKeys",
+                    "id": "f00e967f-2a92-4f11-9628-697b6e31cc58",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
+                    "action": "Move",
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "67d0e26a-1393-4240-b9e0-377ea5a12afd",
-                    "path": "<Keyboard>/e",
+                    "name": "up",
+                    "id": "c61f2b76-0d8f-4b41-8eb7-698ffe524279",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "8589de15-5b99-40ed-9882-90d306585911",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "5caff897-66e5-4d9e-b77a-78eb5611f248",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b3fa8fc3-65b0-4b16-a89a-8288d4ae3cd2",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "QE",
+                    "id": "8a349aae-c3a2-4296-a51d-948a81300da3",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Rotate",
-                    "isComposite": false,
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "6cc9eec8-41de-43f2-bd7f-82a3333359e1",
+                    "name": "left",
+                    "id": "80ab2010-a94e-4b0e-a530-d9dced53df8b",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Rotate",
                     "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e06b49e4-00e4-4dc4-83b5-996b09ca755f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "00b54a71-0733-4e55-947a-7c24d96ff871",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "6484ccbf-ed86-4c2e-bfa8-f65a521cdfd4",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump/Crouch",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "facbc319-52b2-435b-a5fd-44d84edf5f7c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump/Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a74f7c93-0143-4739-88d2-320377965c16",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump/Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
