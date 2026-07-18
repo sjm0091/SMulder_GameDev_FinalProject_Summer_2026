@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7661585036436600337}
   - component: {fileID: 4806580745249101974}
   - component: {fileID: 2771000824630914557}
+  - component: {fileID: 4489133836966975291}
   m_Layer: 0
   m_Name: FlowersPrefab
   m_TagString: Untagged
@@ -103,11 +104,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d11644ca9d8418896e0fa3e343df7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
-  resource: Flowers
+  resource: flower
+  itemData: {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
+  wants: flowers
   amountPerCollet: 1
-  usesRemaining: 1
   promptText: {fileID: 0}
-  destroyOnCollect: 1
+  isResource: 1
   resourceCounter: {fileID: 0}
   player: {fileID: 0}
   maxDistance: 3
+  numWants: 3
+  currentlyHave: 0
+  itemIcon: {fileID: 21300000, guid: c5dce4ec3476f4ee488c13847d55a59d, type: 3}
+  maxStackAmount: 5
+  inventory: {fileID: 0}
+--- !u!135 &4489133836966975291
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5849611386334081469}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
