@@ -6598,7 +6598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterBehaviorScript1
   queryingText: I want 3 flowers
-  waitingText: Do you have my flowers?
+  waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
   characterSpot: {fileID: 11400000, guid: afa90a594fee549448d3d452d8acd4ab, type: 2}

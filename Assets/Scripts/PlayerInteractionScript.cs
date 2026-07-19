@@ -14,7 +14,10 @@ public class PlayerInteractionScript : MonoBehaviour
     private float minDistance = 5f;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
+    public string currentCharMessage = "Talk [E]";
+    public bool talking;
     public InteractableObject currentItem;
+
     public CharacterBehaviorScript1 currentChar;
     public Inventory inventory;
     private bool isInteracting = false;
@@ -95,13 +98,11 @@ public class PlayerInteractionScript : MonoBehaviour
                 charFound = hit.gameObject.GetComponent<CharacterBehaviorScript1>();
                 if (charFound == null)
                 {
+                    isCharInteracting = false;
                     continue;
                 }
                 charInteraction = true;
-                if (charFound == null)
-                {
-                    isCharInteracting = false;
-                }
+                
             }
 
             // Debug.Log("yaya!");
@@ -158,13 +159,23 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             
             // Debug.Log("current Char");
-            promptText.text = currentChar.promptText;
-            promptText.gameObject.SetActive(true);
+            // if (promptText.text != currentChar.promptText && promptText.text != currentChar.happyText && promptText.text != currentChar.waitingText && promptText.text != currentChar.queryingText)
+            // {
+            if (!talking) {
+                promptText.text = currentChar.promptText;
+                promptText.gameObject.SetActive(true);
+            } else
+            {
+                promptText.text = currentCharMessage;
+            }
+            
             
         }
-        else if (currentChar == null && currentItem == null)
+        else if (currentChar == null && currentItem == null && !isCharInteracting)
         {
             promptText.gameObject.SetActive(false);
+            talking = false;
+            Debug.Log("curr char is null & curr item is null: setting prompt text false");
         }
         
     }
@@ -294,11 +305,16 @@ public class PlayerInteractionScript : MonoBehaviour
         }
 
         Debug.Log("toSend: " + toSend);
-        currentChar.GiveGift(toSend);
+        bool isGiven = currentChar.GiveGift(toSend, promptText);
+        if (isGiven)
+        {
+            currentCharMessage = currentChar.currText;
+        }
     }
 
     private IEnumerator CharInteractRoutine()
     {
+        talking = true;
         isCharInteracting = true;
         if (promptText != null)
         {
@@ -306,6 +322,7 @@ public class PlayerInteractionScript : MonoBehaviour
             // promptText.gameObject.SetActive(false);
         }
         currentItem = null;
+        currentCharMessage = currentChar.currText;
         currentChar.Interact(promptText);
         currentChar = null;
         
@@ -321,6 +338,7 @@ public class PlayerInteractionScript : MonoBehaviour
         if (promptText != null)
         {
             promptText.gameObject.SetActive(false);
+            Debug.Log("item interact routine set active false");
         }
 
     

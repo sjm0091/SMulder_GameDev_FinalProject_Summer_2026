@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 
 public enum InteractionMode
@@ -22,6 +23,7 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     public List<ItemData> itemsWanted = new List<ItemData>(); 
     public List<int> itemAmountsWanted = new List<int>(); // corresponds to itemsWanted
     public InteractionMode interactionMode;
+    public string currText;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +34,8 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         {
             Debug.LogError("lengths of items and item amounts must match for playability");
         }
+
+        currText = queryingText;
     }
 
     // Update is called once per frame
@@ -45,11 +49,13 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         if (interactionMode == InteractionMode.Querying)
         {
             interactionMode = InteractionMode.Waiting;
+            currText = waitingText;
             return null;
         }
         if (interactionMode == InteractionMode.Waiting)
         {
             interactionMode = InteractionMode.Happy;
+            currText = happyText;
             return characterSpot;
         }
         return null;
@@ -77,9 +83,12 @@ public class CharacterBehaviorScript1 : MonoBehaviour
             default:
                 break;
         }
+
+        Debug.Log("messageText: " + messageText.gameObject.name);
+        messageText.gameObject.SetActive(true);
     }
 
-    public bool GiveGift(ItemData[] items)
+    public bool GiveGift(ItemData[] items, TextMeshProUGUI messageText)
     {
         Debug.Log("Give Gift triggered");
         Debug.Log("itemsWanted: " + itemsWanted);
@@ -108,6 +117,7 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         if (enough)
         {
             ChangeMode();
+            messageText.text = happyText;
         }
 
         return enough;
