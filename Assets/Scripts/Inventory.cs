@@ -123,6 +123,28 @@ public class Inventory : MonoBehaviour
         
     }
 
+    public void RemoveItem(ItemData itemData)
+    {
+        Debug.Log("Remove Item triggered");
+        for (int i = slotDataList.Length - 1; i >= 0; i--)
+        {
+            if (slotDataList[i] == null)
+            {
+                Debug.Log("slotDataList[i] == null: " + i);
+                continue;
+            }
+            Debug.Log("Remove itemData name?: " + slotDataList[i].item.itemData.name);
+            if (slotDataList[i].item.itemData == itemData)
+            {
+                slotDataList[i].amount--;
+                if (slotDataList[i].amount <= 0)
+                {
+                    slotDataList[i] = null;
+                }
+            }
+        }
+    }
+
     public Dictionary<ItemData, int> GetItemsInInventory()
     {
         Debug.Log("Get items in inventory triggered.");

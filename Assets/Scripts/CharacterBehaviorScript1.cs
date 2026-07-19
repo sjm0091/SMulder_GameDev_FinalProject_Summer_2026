@@ -18,7 +18,8 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     public string waitingText;
     public string happyText;
     public string promptText = "Talk [E]";
-    public ItemData characterSpot;
+    // public ItemData characterSpot;
+    public InteractableObject characterSpot;
 
     public List<ItemData> itemsWanted = new List<ItemData>(); 
     public List<int> itemAmountsWanted = new List<int>(); // corresponds to itemsWanted
@@ -56,7 +57,7 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         {
             interactionMode = InteractionMode.Happy;
             currText = happyText;
-            return characterSpot;
+            return characterSpot.itemData;
         }
         return null;
     }

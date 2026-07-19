@@ -6601,11 +6601,12 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 11400000, guid: afa90a594fee549448d3d452d8acd4ab, type: 2}
+  characterSpot: {fileID: 300092128632550173, guid: 74db3855e5f5c4339a5a56ce9a8de2ac, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
   itemAmountsWanted: 03000000
   interactionMode: 0
+  currText: 
 --- !u!1 &1587272466
 GameObject:
   m_ObjectHideFlags: 0
@@ -7395,6 +7396,8 @@ MonoBehaviour:
   character: {fileID: 0}
   messageText: {fileID: 0}
   promptText: {fileID: 349533714}
+  currentCharMessage: 'Talk [E]'
+  talking: 0
   currentItem: {fileID: 0}
   currentChar: {fileID: 0}
   inventory: {fileID: 1126610423}

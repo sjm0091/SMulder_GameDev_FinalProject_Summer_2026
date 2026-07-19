@@ -8,7 +8,7 @@ public class InteractableObject : MonoBehaviour
 {
     public string resource = "flower";
     public ItemData itemData;
-    public int amountPerCollet = 1;
+    public int amountPerCollect = 1;
     private int usesRemaining = 1;
     private bool destroyOnCollect = true;
     public ResourceCounter resourceCounter;
@@ -58,7 +58,7 @@ public class InteractableObject : MonoBehaviour
         usesRemaining--;
         
         // resourceCounter.AddResource(resource);
-        inventory.AddItem(this, amountPerCollet);
+        inventory.AddItem(this, amountPerCollect);
         
         if (destroyOnCollect && usesRemaining <= 0)
         {

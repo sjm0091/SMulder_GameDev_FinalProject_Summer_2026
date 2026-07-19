@@ -309,6 +309,16 @@ public class PlayerInteractionScript : MonoBehaviour
         if (isGiven)
         {
             currentCharMessage = currentChar.currText;
+            Debug.Log("items wanted: " + currentChar.itemsWanted.Count);
+            for (int i = 0; i < currentChar.itemsWanted.Count; i++)
+            {
+                for (int j = 0; j < currentChar.itemAmountsWanted[i]; j++)
+                {
+                    inventory.RemoveItem(currentChar.itemsWanted[i]);
+                }
+                
+            }
+            inventory.AddItem(currentChar.characterSpot, 1);
         }
     }
 
