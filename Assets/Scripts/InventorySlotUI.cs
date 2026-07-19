@@ -13,6 +13,7 @@ public class InventorySlotUI : MonoBehaviour
     {
         Debug.Log("set slot");
         Debug.Log("amount: " + amount);
+        Debug.Log("item: " + item.itemName);
         
         itemIcon.sprite = item.itemIcon;
         itemIcon.gameObject.SetActive(true);

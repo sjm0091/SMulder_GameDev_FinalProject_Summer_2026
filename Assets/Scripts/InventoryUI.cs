@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class InventoryUI : MonoBehaviour
 {
     public GameObject inventory;
+    public GameObject inventoryUI;
 
     private bool isOpen = false;
     public void OnInventory(InputValue value)
@@ -20,6 +21,6 @@ public class InventoryUI : MonoBehaviour
     private void ToggleInventory()
     {
         isOpen = !isOpen;
-        inventory.SetActive(isOpen);
+        inventoryUI.SetActive(isOpen);
     }
 }

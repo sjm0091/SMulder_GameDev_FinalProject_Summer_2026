@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour
 {
     public InventorySlotData[] slotDataList;
     public InventorySlotUI[] slotUIList; // assign in editor
+    public GameObject inventoryUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,7 +19,7 @@ public class Inventory : MonoBehaviour
         {
             slotDataList[i] = null;
         }
-
+        inventoryUI.SetActive(false);
         UpdateUI();
     }
 
@@ -28,6 +29,7 @@ public class Inventory : MonoBehaviour
         {
             if (slotDataList[i] != null)
             {
+                Debug.Log("item = " + slotDataList[i]);
                 slotUIList[i].SetSlot(slotDataList[i].item.itemData, slotDataList[i].amount);
             }
             else
@@ -86,7 +88,7 @@ public class Inventory : MonoBehaviour
                 }
             }
         } 
-
+        Debug.Log("slotDataList: " + slotDataList);
         // if no non-full slots with item (put in next empty slot)
         for (int i = 0; i < slotDataList.Length; i++)
         {
@@ -100,10 +102,11 @@ public class Inventory : MonoBehaviour
             // add slot data
             InventorySlotData newSlotData = new InventorySlotData(item, amountToSet);
             slotDataList[i] = newSlotData;
-            slotDataList[i].itemData = item.itemData;
+            Debug.Log(slotDataList[i].item);
+            // slotDataList[i].itemData = item.itemData;
 
 
-            slotDataList[i].amount = amountToSet;
+            // slotDataList[i].amount = amountToSet;
 
             amount = item.maxStackAmount > amount ? 0 : amount - item.maxStackAmount;
 
@@ -118,5 +121,30 @@ public class Inventory : MonoBehaviour
         UpdateUI();
         
         
+    }
+
+    public Dictionary<ItemData, int> GetItemsInInventory()
+    {
+        Debug.Log("Get items in inventory triggered.");
+        Dictionary<ItemData, int> myDict = new Dictionary<ItemData, int>();
+        for (int i = 0; i < slotDataList.Length; i++)
+        {
+            if (slotDataList[i] == null)
+            {
+                Debug.Log(i + ": slot data is null");
+                continue;
+            }
+            if (myDict.Keys.Contains(slotDataList[i].itemData))
+            {
+                myDict[slotDataList[i].itemData] += slotDataList[i].amount;
+                Debug.Log("exists: myDict[" + slotDataList[i].itemData.name + "]: " + slotDataList[i].amount);
+            } else
+            {
+                myDict[slotDataList[i].itemData] = slotDataList[i].amount;
+                Debug.Log("!exists: myDict[" + slotDataList[i].itemData.name + "]: " + slotDataList[i].amount);
+            }
+        }
+        
+        return myDict;
     }
 }

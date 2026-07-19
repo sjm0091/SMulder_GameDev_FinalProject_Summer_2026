@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using NUnit.Compatibility;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,12 +15,17 @@ public class PlayerInteractionScript : MonoBehaviour
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
     public InteractableObject currentItem;
+    public CharacterBehaviorScript1 currentChar;
     public Inventory inventory;
     private bool isInteracting = false;
+    private bool charInteraction = false;
+    private bool isCharInteracting = false;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        // inventory.gameObject.SetActive(true);
+        // inventory.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -37,49 +45,124 @@ public class PlayerInteractionScript : MonoBehaviour
         // messageText.gameObject.SetActive(true);
 
         FindNearbyItem();
+        FindNearbyItem(true);
 
 
     }
 
-    public void FindNearbyItem()
+    // public void FindNearbyCharacter()
+    // {
+    // }
+
+    public void FindNearbyItem(bool character = false)
     {
         // Debug.Log("find nearest item triggered ");
         Collider[] hits = Physics.OverlapSphere(transform.position, minDistance);
         // Debug.Log(hits);
         // Debug.Log(hits.Length);
         InteractableObject closestItem = null;
+        CharacterBehaviorScript1 closestChar = null;
         float closestDistance = Mathf.Infinity;
 
         foreach(Collider hit in hits)
         {
             // Debug.Log("Hit: " + hit.gameObject.name);
-            InteractableObject item = hit.gameObject.GetComponent<InteractableObject>();
-            if (item == null)
+            CharacterBehaviorScript1 charFound;
+            InteractableObject item;
+            if (character)
             {
-                continue;
+                charFound = null;
+                item = currentItem;
+            }
+            else
+            {
+                item = null;
+                charFound = currentChar;
+            }
+            
+            if (!character)
+            {
+                // Debug.Log("not character");
+                item = hit.gameObject.GetComponent<InteractableObject>();
+                if (item == null)
+                {
+                    continue;
+                }
+                charInteraction = false;
+            } else
+            {
+                // Debug.Log("character");
+                charFound = hit.gameObject.GetComponent<CharacterBehaviorScript1>();
+                if (charFound == null)
+                {
+                    continue;
+                }
+                charInteraction = true;
+                if (charFound == null)
+                {
+                    isCharInteracting = false;
+                }
             }
 
-            float distance = Vector3.Distance(transform.position, hit.transform.position);
+            // Debug.Log("yaya!");
+            // Debug.Log("character bool: " + character);
 
-            if (distance < closestDistance)
+            
+            
+
+            float distance = Vector3.Distance(transform.position, hit.transform.position);
+            
+            if (distance < closestDistance && !character)
             {
+                // Debug.Log("!character set");
                 closestItem = item;
                 closestDistance = distance;
             }
+            else if (distance < closestDistance && character)
+            {
+                // Debug.Log("character set");
+                closestChar = charFound;
+                closestDistance = distance;
+            }
         }
-
-        currentItem = closestItem;
+        if (character)
+        {
+            currentChar = closestChar;
+        }
+        else
+        {
+            currentItem = closestItem;
+        }
+        
+        
 
         if (promptText == null)
         {
+            // Debug.Log("promptText is NULL");
             return;
         }
 
+        // Debug.Log("currentItem: " + currentItem);
+        // Debug.Log("currentChar: " + currentChar);
+        // Debug.Log("isInteracting: " + isInteracting);
         if (currentItem != null && !isInteracting)
         {
+            // Debug.Log("current Item");
             promptText.text = "Press V To Interact";
+            
             promptText.gameObject.SetActive(true);
-        } else
+            // Debug.Log(promptText.text);
+
+        } 
+        else if (currentChar != null && !isCharInteracting)
+        {
+            
+            // Debug.Log("current Char");
+            promptText.text = currentChar.promptText;
+            promptText.gameObject.SetActive(true);
+            
+        }
+        else if (currentChar == null && currentItem == null)
         {
             promptText.gameObject.SetActive(false);
         }
@@ -136,13 +219,26 @@ public class PlayerInteractionScript : MonoBehaviour
             return;
         }
 
-        if (currentItem == null || isInteracting)
+        if ((currentChar == null && currentItem == null) || isInteracting)
         {
             // Debug.Log("current item is null or isInteracting");
             return;
         }
 
-        StartCoroutine(InteractRoutine());
+        
+        
+
+        if(charInteraction)
+        {
+            Debug.Log("char interaction routine");
+            charInteraction = false;
+            StartCoroutine(CharInteractRoutine());
+        } else
+        {
+            StartCoroutine(ItemInteractRoutine());
+        }
+
+        
 
         Debug.Log("interact triggered with item");
         
@@ -152,7 +248,72 @@ public class PlayerInteractionScript : MonoBehaviour
 
     }
 
-    private IEnumerator InteractRoutine()
+    public void OnGive(InputValue value)
+    {
+        Debug.Log("Give triggered");
+        if (!value.isPressed)
+        {
+            // Debug.Log("value was not pressed");
+            return;
+        }
+
+        if (currentChar == null)
+        {
+            return;
+        }
+
+        if (currentChar.interactionMode != InteractionMode.Waiting)
+        {
+            return;
+        }
+        
+        List<ItemData> itemList = new List<ItemData>();
+
+        
+
+        Dictionary<ItemData, int> myDict = inventory.GetItemsInInventory();
+        
+        foreach (ItemData key in myDict.Keys)
+        {
+            for (int j = 0; j < myDict[key]; j++)
+            {
+                itemList.Add(key);
+            }
+        }
+
+        ItemData[] toSend = new ItemData[itemList.Count];
+        for(int i = 0; i < itemList.Count; i++)
+        {
+            toSend[i] = itemList[i];
+            Debug.Log("item added: " + toSend[i]);
+        }
+
+        foreach(ItemData item in toSend)
+        {
+            Debug.Log("item in toSend: " + item);
+        }
+
+        Debug.Log("toSend: " + toSend);
+        currentChar.GiveGift(toSend);
+    }
+
+    private IEnumerator CharInteractRoutine()
+    {
+        isCharInteracting = true;
+        if (promptText != null)
+        {
+            Debug.Log("prompt text is not null");
+            // promptText.gameObject.SetActive(false);
+        }
+        currentItem = null;
+        currentChar.Interact(promptText);
+        currentChar = null;
+        
+
+        yield return null;
+    }
+
+    private IEnumerator ItemInteractRoutine()
     {
         Debug.Log("Interact routine started");
         isInteracting = true;
@@ -162,13 +323,17 @@ public class PlayerInteractionScript : MonoBehaviour
             promptText.gameObject.SetActive(false);
         }
 
-        if (currentItem != null)
-        {
-            currentItem.Interact(inventory);
-        }
+    
+        currentChar = null;
+        Debug.Log("currentItem = " + currentItem.name);
+        currentItem.Interact(inventory);
+        currentItem = null;
+        
+        
 
         yield return new WaitForSeconds(0.3f);
 
         isInteracting = false;
+        
     }
 }

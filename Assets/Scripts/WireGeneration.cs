@@ -49,7 +49,7 @@ public class WireGeneration : MonoBehaviour
         if (Vector3.Distance(lastSegment.transform.position, player.position) < minDistance)
         {
             interactionText.gameObject.SetActive(true);
-            Debug.Log(Vector3.Distance(lastSegment.transform.position, player.position));
+            // Debug.Log(Vector3.Distance(lastSegment.transform.position, player.position));
         }
         else
         {
