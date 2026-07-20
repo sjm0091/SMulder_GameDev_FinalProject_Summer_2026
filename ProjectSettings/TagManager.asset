@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Character
+  - NonInteractable
   layers:
   - Default
   - TransparentFX

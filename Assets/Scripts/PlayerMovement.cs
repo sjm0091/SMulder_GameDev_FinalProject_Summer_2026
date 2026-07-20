@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private Rigidbody rb;
     public float moveSpeed = 5f;
+    public float sprintSpeed = 10f;
     public float jumpForce = 1f;
     public float rotationSpeed = 0.5f;
 
@@ -38,9 +39,15 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = false;
         rb.rotation = transform.rotation;
         rb.freezeRotation = true;
+        float currSpeed = moveSpeed;
+
+        if (jumpCrouchInput.x != 0)
+        {
+            currSpeed = sprintSpeed;
+        }
 
 
-        Vector3 movement = (((transform.forward * moveInput.y) + (transform.right * moveInput.x)).normalized * moveSpeed) + new Vector3(0f, rb.linearVelocity.y, 0f);
+        Vector3 movement = (((transform.forward * moveInput.y) + (transform.right * moveInput.x)).normalized * currSpeed) + new Vector3(0f, rb.linearVelocity.y, 0f);
         
         // Debug.Log("toMove: " + movement);
         rb.linearVelocity = movement;
@@ -57,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
                 Crouch();
             }
         }
+
+        
 
         
     }
