@@ -11,6 +11,8 @@ public class DayNightController : MonoBehaviour
     public bool isDay = true;
     public TheKing theKing;
     List<CircuitNode> circuitNodes = new List<CircuitNode>();
+    List<GameObject> characters = new List<GameObject>();
+    public WirePlaceMode wireScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,6 +29,11 @@ public class DayNightController : MonoBehaviour
 
     public void OnClick()
     {
+        if (wireScript.finalNode == null)
+        {
+            return;
+        }
+
         nightCamera.enabled = true;
         mainCamera.enabled = false;
 
@@ -38,8 +45,9 @@ public class DayNightController : MonoBehaviour
         StartCoroutine(WaitForCircuitToFinish());
     }
 
-    public void StartDay() // TODO: implement when night routines end
+    public void StartDay() 
     {
+        // theKing.ready = null;
         mainCamera.enabled = true;
         nightCamera.enabled = false;
 
@@ -65,6 +73,9 @@ public class DayNightController : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
+
+        Debug.Log("the king wants: " + theKing.wantsGift);
+        // Debug.Log("final output: " + );
 
         
 

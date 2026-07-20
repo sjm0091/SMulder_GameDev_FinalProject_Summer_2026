@@ -27,6 +27,7 @@ public class WirePlaceMode : MonoBehaviour
     private CircuitNode currentFirstNode;
     public List<Button> gateButtons = new List<Button>();
     public string currentGateSelected;
+    public GameObject finalNode;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -91,6 +92,7 @@ public class WirePlaceMode : MonoBehaviour
             currentSpot += direction * spacing;
             if (Vector3.Distance(currentSpot, end) < 0.5)
             {
+                wireStarts.Add(wirePart.transform);
                 break;
             }
 
@@ -120,10 +122,12 @@ public class WirePlaceMode : MonoBehaviour
             // wireEndPairs.Add()
             wireEndPairs[currentWireStart] = currentWireStart;
             currentFirstNode = node;
+            wireStarts.Add(thisWire.transform);
         } else
         {
             wireEndPairs[currentWireStart] = thisWire;
             bool inputAdded = node.AddInput(currentFirstNode);
+            wireStarts.Add(thisWire.transform);
             if (!inputAdded)
             {
                 return false;
@@ -137,7 +141,7 @@ public class WirePlaceMode : MonoBehaviour
             
         }
 
-        wireStarts.Add(thisWire.transform);
+        
 
 
         wireStart = !wireStart;
@@ -153,14 +157,23 @@ public class WirePlaceMode : MonoBehaviour
 
         GameObject charSpot = Instantiate(charSpotPrefab, pos, Quaternion.identity);
         charSpotList.Add(charSpot);
+        wireStarts.Add(charSpot.transform);
     }
 
     public void ClearArea()
     {
+        List<Transform> toDestroy = new List<Transform>();
         foreach (Transform wire in wireStarts)
         {
-            Destroy(wire.gameObject);
+            toDestroy.Add(wire);
         }
+        for (int i = 0; i < toDestroy.Count; i++)
+        {
+            Destroy(toDestroy[i].gameObject);
+        }
+        wireStarts.Clear();
+        wireDict.Clear();
+        wireStart = true;
     }
 
     public void OnDropdownChange(string value)
@@ -232,6 +245,21 @@ public class WirePlaceMode : MonoBehaviour
         }
 
         charSpotPrefab = item;
+    }
+
+    public void SetFinalNode(GameObject node)
+    {
+        if (finalNode != null)
+        {
+            finalNode.GetComponent<CircuitNode>().finalOutput = false;
+        }
+        finalNode = node;
+        node.GetComponent<CircuitNode>().finalOutput = true;
+
+        
+
+        Debug.Log("FinalNode: " + finalNode.name);
+
     }
 
     

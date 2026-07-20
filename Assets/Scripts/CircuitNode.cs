@@ -22,11 +22,13 @@ public class CircuitNode : MonoBehaviour
     public DayNightController gameManager;
     private bool nightOn = false;
     public bool actionsCompleted = false;
+    public TheKing theKing;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         thisGate = GetComponent<GateBehaviorScript>();
         gameManager = FindFirstObjectByType<DayNightController>();
+        theKing = FindAnyObjectByType<TheKing>();
     }
 
     // Update is called once per frame
@@ -149,6 +151,10 @@ public class CircuitNode : MonoBehaviour
         if (finalOutput)
         {
             Debug.Log("Final Output: " + output);
+            Debug.Log("The King wants: " + theKing.wantsGift);
+            Debug.Log("output == theKing.wantsGift: " + (output == theKing.wantsGift));
+            theKing.survivedNight = output == theKing.wantsGift;
+            // theKing.ready = "yes";
         }
         actionsCompleted = true;
         

@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: -1748522384897951143}
   m_Layer: 0
   m_Name: CharacterSpotPrefab
-  m_TagString: Untagged
+  m_TagString: NonInteractable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,6 +189,7 @@ MonoBehaviour:
   nodeName: Character Spot
   inputList: 
   output: 0
+  finalOutput: 0
   wireConnection: {fileID: 5980404804447938615}
   inputs: []
   outputs: []
@@ -197,6 +198,7 @@ MonoBehaviour:
   hasOutputLimit: 0
   outputMax: 2
   gameManager: {fileID: 0}
+  actionsCompleted: 0
 --- !u!65 &4328592463746204711
 BoxCollider:
   m_ObjectHideFlags: 0

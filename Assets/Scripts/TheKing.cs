@@ -9,17 +9,20 @@ public class TheKing : MonoBehaviour
     public GameObject kingsMessage;
     public TextMeshProUGUI bannerText;
     public ScoreKeeper scoreKeeper;
-    public bool survivedNight;
+    public bool survivedNight; // Set with WirePlaceMode
     public string surviveText = "The King is happy with his ";
     public string failText = "The King is displeased with his ";
     public WirePlaceMode wireScript;
     public DayNightController dayNightController;
+    public NightBehavior nightBehavior;
+    // public string ready = null;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         scoreKeeper = GetComponent<ScoreKeeper>();
         wireScript = GetComponent<WirePlaceMode>();
         dayNightController = GetComponent<DayNightController>();
+        nightBehavior = GetComponent<NightBehavior>();
         kingsMessage.SetActive(false);
     }
 
@@ -31,6 +34,10 @@ public class TheKing : MonoBehaviour
 
     public void AfterNight()
     {
+        // if (ready == null)
+        // {
+        //     return;
+        // }
         kingsMessage.SetActive(true);
         if (survivedNight)
         {
@@ -55,6 +62,7 @@ public class TheKing : MonoBehaviour
 
     public void OnClickNextDay()
     {
+        nightBehavior.GenerateMonsters();
         kingsMessage.SetActive(false);
         wireScript.ClearArea();
         dayNightController.StartDay();

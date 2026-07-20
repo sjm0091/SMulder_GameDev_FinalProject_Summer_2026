@@ -157,7 +157,7 @@ public class PlayerInteractionScript : MonoBehaviour
             {
                 // Debug.Log("character");
                 charFound = hit.gameObject.GetComponent<CharacterBehaviorScript1>();
-                if (charFound == null)
+                if (charFound == null || charFound.CompareTag("NonInteractable"))
                 {
                     isCharInteracting = false;
                     continue;
@@ -480,6 +480,19 @@ public class PlayerInteractionScript : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         isInteracting = false;
+        
+    }
+
+    public void OnSetFinal(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        
+        gameManager.SetFinalNode(currentNode.gameObject);
+        
         
     }
 }

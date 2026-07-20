@@ -16,10 +16,12 @@ public class NightBehavior : MonoBehaviour
     public int numMonsters = 2;
     public TextMeshProUGUI infoText;
     public bool kingWantsGift;
+    public TheKing theKing;
     // pbli
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        theKing = GetComponent<TheKing>();
         GenerateMonsters();
     }
 
@@ -34,23 +36,25 @@ public class NightBehavior : MonoBehaviour
         // currently 2
         for (int i = 0; i < gateList.Count; i++)
         {
-            bool isYes = Random.value > 0.5 ? true : false;
-            Debug.Log("isYes: " + isYes);
+            bool isMonster = Random.value > 0.5 ? true : false;
+            Debug.Log("isYes: " + isMonster);
+            Debug.Log("isMonster: " + isMonster);
             
             // when monster is true, input value should be false
-            gateList[i].AddInputValue(true);
-            gateList[i].AddInputValue(isYes);
+            gateList[i].AddInputValue(isMonster);
+            gateList[i].AddInputValue(isMonster);
             if (i == 0)
             {
-                monster1 = isYes;
+                monster1 = isMonster;
             }
             if (i == 1)
             {
-                monster2 = isYes;
+                monster2 = isMonster;
             }
         }
 
         bool wantsGift = Random.value > 0.5 ? true : false;
+        theKing.wantsGift = wantsGift;
         kingWantsGift = wantsGift;
 
         infoText.text = "Nighttime Information \n\nGate 1: " + (monster1 ? "monster" : "safe") + " \nGate 2: " + (monster2 ? "monster" : "safe") + "\n\nKing desires: " + (kingWantsGift ? "gift" : "no gift");
