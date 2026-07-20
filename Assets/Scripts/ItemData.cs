@@ -4,6 +4,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public string itemName;
+    public string gateName = "null";
     public Sprite itemIcon;
     public int maxStackSize;
 }

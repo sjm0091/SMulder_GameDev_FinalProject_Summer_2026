@@ -3,15 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using TMPro;
+using NUnit.Framework.Constraints;
 
 public class Inventory : MonoBehaviour
 {
     public InventorySlotData[] slotDataList;
     public InventorySlotUI[] slotUIList; // assign in editor
     public GameObject inventoryUI;
+    public InteractableObject forTesting;
+    public WirePlaceMode wireScript;
+    private List<string> gateNames = new List<string>();
+    public List<Button> buttons = new List<Button>();
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gateNames.Add("NANDSpot");
+        gateNames.Add("ANDSpot");
+        gateNames.Add("ORSpot");
+        gateNames.Add("NORSpot");
+        gateNames.Add("XORSpot");
+        gateNames.Add("XNORSpot");
+        gateNames.Add("NOTSpot");
         slotDataList = new InventorySlotData[slotUIList.Length];
 
         // Set slotData for each slot to null
@@ -21,6 +37,9 @@ public class Inventory : MonoBehaviour
         }
         inventoryUI.SetActive(false);
         UpdateUI();
+
+        //For testing
+        // AddItem(forTesting, 1);
     }
 
     public void UpdateUI()
@@ -42,7 +61,7 @@ public class Inventory : MonoBehaviour
     }
 
     // add item to inventory slot(s)
-    public void AddItem(InteractableObject item, int amount)
+    public void AddItem(InteractableObject item, int amount, GameObject charPrefab = null)
     {
         bool found = false;
         // check if item already in inventory
@@ -61,6 +80,40 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
+        
+        Debug.Log("gateNames.Contains(item.itemData.itemName): " + gateNames.Contains(item.itemData.itemName));
+        if (gateNames.Contains(item.itemData.itemName))
+        {
+            foreach(Button button in buttons)
+            {
+                if (button.name.Contains(item.itemData.gateName))
+                {
+                    button.gameObject.SetActive(true);
+                    if (charPrefab != null)
+                    {
+                        Debug.Log("Adding char prefab");
+                        wireScript.charSpotPrefab = charPrefab;
+                    }
+                    
+                    
+                }
+            }
+
+        }
+        //         List<TMP_Dropdown.OptionData> dropdownData = new List<TMP_Dropdown.OptionData>();
+        //         if (wireScript.dropdown.options != null)
+        //         {
+        //             foreach (TMP_Dropdown.OptionData option in wireScript.dropdown.options)
+        //         {
+        //             dropdownData.Add(option);
+        //         }
+        //         }
+                
+        //         TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(item.itemData.itemName);
+        //         dropdownData.Add(newOption);
+        //         wireScript.dropdown.AddOptions(dropdownData);
+        //         Debug.Log("add options completed");
+        //     }
 
         // if item already in inventory, add to current stacks
         if (found)
@@ -87,7 +140,11 @@ public class Inventory : MonoBehaviour
                     }
                 }
             }
+            
+            
         } 
+
+        
         Debug.Log("slotDataList: " + slotDataList);
         // if no non-full slots with item (put in next empty slot)
         for (int i = 0; i < slotDataList.Length; i++)
@@ -117,6 +174,9 @@ public class Inventory : MonoBehaviour
                 return;
             }
         }
+
+        
+        
 
         UpdateUI();
         

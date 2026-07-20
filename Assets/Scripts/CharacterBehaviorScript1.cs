@@ -20,6 +20,7 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     public string promptText = "Talk [E]";
     // public ItemData characterSpot;
     public InteractableObject characterSpot;
+    public GameObject charSpotPrefab;
 
     public List<ItemData> itemsWanted = new List<ItemData>(); 
     public List<int> itemAmountsWanted = new List<int>(); // corresponds to itemsWanted
@@ -136,6 +137,6 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         }
         Debug.Log("actual count: "+count);
 
-        return count == amount;
+        return count >= amount;
     }
 }

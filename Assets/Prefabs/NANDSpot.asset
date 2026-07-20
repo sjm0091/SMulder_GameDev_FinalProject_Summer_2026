@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: NANDSpot
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: NANDSpot
+  gateName: NAND
   itemIcon: {fileID: 21300000, guid: 510626f7f810b40daa8eabb570285275, type: 3}
   maxStackSize: 5

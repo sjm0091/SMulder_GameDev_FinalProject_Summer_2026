@@ -30,33 +30,35 @@ public class GateBehaviorScript : MonoBehaviour
         
     }
 
-    public void PerformGateBehavior()
+    public bool PerformGateBehavior()
     {
+        bool newOutput = false;
         switch (gateType)
         {
             case GateType.NAND:
-                CallNAND(input1, input2);
+                newOutput = CallNAND(input1, input2);
                 break;
             case GateType.NOT:
-                CallNOT(input1);
+                newOutput = CallNOT(input1);
                 break;
             case GateType.NOR:
-                CallNOR(input1, input2);
+                newOutput = CallNOR(input1, input2);
                 break;
             case GateType.OR:
-                CallOR(input1, input2);
+                newOutput = CallOR(input1, input2);
                 break;
             case GateType.AND:
-                CallAND(input1, input2);
+                newOutput = CallAND(input1, input2);
                 break;
             case GateType.XOR:
-                CallXOR(input1, input2);
+                newOutput = CallXOR(input1, input2);
                 break;
             case GateType.XNOR:
-                CallXNOR(input1, input2);
+                newOutput = CallXNOR(input1, input2);
                 break;
 
         }
+        return newOutput;
     }
 
     public bool CallAND(bool firstInput, bool secondInput)
@@ -66,6 +68,9 @@ public class GateBehaviorScript : MonoBehaviour
 
     public bool CallNAND(bool firstInput, bool secondInput)
     {
+        Debug.Log("first input: " + firstInput);
+        Debug.Log("second input: " + secondInput);
+        Debug.Log("NAND: " + !(firstInput && secondInput));
         return !(firstInput && secondInput);
     }
 

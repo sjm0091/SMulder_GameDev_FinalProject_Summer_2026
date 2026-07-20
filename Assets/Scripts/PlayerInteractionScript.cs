@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using NUnit.Compatibility;
 using TMPro;
@@ -19,7 +20,17 @@ public class PlayerInteractionScript : MonoBehaviour
     public InteractableObject currentItem;
 
     public CharacterBehaviorScript1 currentChar;
+    public CircuitNode currentNode;
     public Inventory inventory;
+    public WirePlaceMode gameManager;
+    public TextMeshProUGUI nodeSelectedText;
+
+    //wire placement
+    private Vector3 start;
+    private Vector3 end;
+    private bool placeStart = true;
+    private float placementOffset = 2f;
+
     private bool isInteracting = false;
     private bool charInteraction = false;
     private bool isCharInteracting = false;
@@ -49,6 +60,10 @@ public class PlayerInteractionScript : MonoBehaviour
 
         FindNearbyItem();
         FindNearbyItem(true);
+        if (gameManager.wireMode)
+        {
+            FindNearbyCircuitNode();
+        }
 
 
     }
@@ -56,6 +71,52 @@ public class PlayerInteractionScript : MonoBehaviour
     // public void FindNearbyCharacter()
     // {
     // }
+
+    public void FindNearbyCircuitNode()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, minDistance);
+
+        CircuitNode closestNode = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach(Collider hit in hits)
+        {
+            // Debug.Log("Hit: " + hit.gameObject.name);
+            Debug.Log("Hit: " + hit.gameObject.name);
+            CircuitNode nodeFound;
+
+            nodeFound = null;
+            
+            nodeFound = hit.gameObject.GetComponent<CircuitNode>();
+            if (nodeFound == null)
+            {
+                continue;
+            }
+
+            float distance = Vector3.Distance(transform.position, hit.transform.position);
+            
+            if (distance < closestDistance)
+            {
+                closestNode = nodeFound;
+                closestDistance = distance;
+            }
+
+            
+        }
+        currentNode = closestNode;
+        Debug.Log(closestNode);
+        Debug.Log(currentNode);
+
+        if (currentNode != null) {
+            Debug.Log("closest node not null");
+            nodeSelectedText.gameObject.SetActive(true);
+            nodeSelectedText.text = "Node Selected: " + currentNode.nodeName;
+        } else
+        {
+            Debug.Log("closest node is NULL");
+            nodeSelectedText.gameObject.SetActive(false);
+        }
+    }
 
     public void FindNearbyItem(bool character = false)
     {
@@ -175,7 +236,7 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             promptText.gameObject.SetActive(false);
             talking = false;
-            Debug.Log("curr char is null & curr item is null: setting prompt text false");
+            // Debug.Log("curr char is null & curr item is null: setting prompt text false");
         }
         
     }
@@ -259,6 +320,63 @@ public class PlayerInteractionScript : MonoBehaviour
 
     }
 
+    public void OnWire(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+        
+        if (end != null && start != null)
+        {
+            gameManager.PlaceWire(start, end);
+        }
+
+        
+    }
+
+    public void OnWireEnd(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+        if (currentNode == null)
+        {
+            return;
+        }
+
+        Vector3 position = currentNode.wireConnection.position;
+        
+
+        if (placeStart)
+        {
+            start = position;
+        }
+        else
+        {
+            end = position;
+        }
+
+        gameManager.PlaceWireEnd(position, currentNode);
+
+
+        placeStart = !placeStart;
+    }
+
+    public void OnPlaceChar(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        Vector3 position = transform.position;
+        position = transform.position + (transform.forward * placementOffset);
+
+        gameManager.PlaceChar(position);
+    }
+
     public void OnGive(InputValue value)
     {
         Debug.Log("Give triggered");
@@ -318,7 +436,7 @@ public class PlayerInteractionScript : MonoBehaviour
                 }
                 
             }
-            inventory.AddItem(currentChar.characterSpot, 1);
+            inventory.AddItem(currentChar.characterSpot, 1, currentChar.charSpotPrefab);
         }
     }
 
