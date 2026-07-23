@@ -9438,9 +9438,8 @@ MonoBehaviour:
   inputMax: 2
   hasOutputLimit: 0
   outputMax: 2
-  gameManager: {fileID: 0}
   actionsCompleted: 0
-  theKing: {fileID: 0}
+  nightTimeGameManager: {fileID: 0}
 --- !u!1 &681466898
 GameObject:
   m_ObjectHideFlags: 0
@@ -10796,9 +10795,8 @@ MonoBehaviour:
   inputMax: 2
   hasOutputLimit: 0
   outputMax: 2
-  gameManager: {fileID: 0}
   actionsCompleted: 0
-  theKing: {fileID: 0}
+  nightTimeGameManager: {fileID: 0}
 --- !u!65 &777975544
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12635,9 +12633,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2109079832}
-        m_TargetAssemblyTypeName: DayNightController, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 2109079840}
+        m_TargetAssemblyTypeName: NightTimeGameManager, Assembly-CSharp
+        m_MethodName: StartNight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14396,9 +14394,8 @@ MonoBehaviour:
   inputMax: 2
   hasOutputLimit: 0
   outputMax: 2
-  gameManager: {fileID: 0}
   actionsCompleted: 0
-  theKing: {fileID: 0}
+  nightTimeGameManager: {fileID: 0}
 --- !u!1001 &1108212024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19080,9 +19077,8 @@ MonoBehaviour:
   inputMax: 2
   hasOutputLimit: 0
   outputMax: 2
-  gameManager: {fileID: 0}
   actionsCompleted: 0
-  theKing: {fileID: 0}
+  nightTimeGameManager: {fileID: 0}
 --- !u!114 &1473858227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21234,8 +21230,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2109079837}
-        m_TargetAssemblyTypeName: TheKing, Assembly-CSharp
+      - m_Target: {fileID: 2109079840}
+        m_TargetAssemblyTypeName: NightTimeGameManager, Assembly-CSharp
         m_MethodName: OnClickNextDay
         m_Mode: 1
         m_Arguments:
@@ -23635,9 +23631,8 @@ MonoBehaviour:
   inputMax: 2
   hasOutputLimit: 0
   outputMax: 2
-  gameManager: {fileID: 0}
   actionsCompleted: 0
-  theKing: {fileID: 0}
+  nightTimeGameManager: {fileID: 0}
 --- !u!114 &1817669669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26600,6 +26595,8 @@ GameObject:
   - component: {fileID: 2109079836}
   - component: {fileID: 2109079837}
   - component: {fileID: 2109079838}
+  - component: {fileID: 2109079839}
+  - component: {fileID: 2109079840}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -26740,7 +26737,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109079828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ad402aca7c01473b94846acde2f2893, type: 3}
   m_Name: 
@@ -26750,7 +26747,11 @@ MonoBehaviour:
   sun: {fileID: 410087039}
   isDay: 1
   theKing: {fileID: 0}
+  circuitNodes: []
   wireScript: {fileID: 2109079835}
+  nightBehavior: {fileID: 0}
+  finalOutput: 0
+  judgementController: {fileID: 0}
 --- !u!114 &2109079833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26811,11 +26812,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109079828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abb4dee32e6ce4b3f9f905ae19721af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NightBehavior
+  judgementController: {fileID: 2109079839}
   gameManager: {fileID: 0}
   gateList:
   - {fileID: 1817669668}
@@ -26825,6 +26827,7 @@ MonoBehaviour:
   numMonsters: 2
   infoText: {fileID: 384076684}
   kingWantsGift: 0
+  theKing: {fileID: 0}
 --- !u!114 &2109079837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26832,7 +26835,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109079828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfbb383e5312f40eba5794aa7f4bc146, type: 3}
   m_Name: 
@@ -26847,6 +26850,7 @@ MonoBehaviour:
   failText: 'The King is displeased with his '
   wireScript: {fileID: 0}
   dayNightController: {fileID: 0}
+  nightBehavior: {fileID: 2109079836}
 --- !u!114 &2109079838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26866,6 +26870,51 @@ MonoBehaviour:
   loseScreen: {fileID: 2049942062}
   nightsSurvivedText: {fileID: 1941029736}
   livesText: {fileID: 150430746}
+--- !u!114 &2109079839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109079828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f72d2e333432d47f69ddfd1fb48f91f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JudgementController
+  scoreKeeperManager: {fileID: 2109079838}
+  gate1HasGift: 0
+  gate2HasGift: 0
+  bannerText: {fileID: 689256628}
+--- !u!114 &2109079840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109079828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11e632ff6acb94197bc04629596515a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NightTimeGameManager
+  judgementController: {fileID: 0}
+  wireScript: {fileID: 0}
+  nightCamera: {fileID: 394098950}
+  mainCamera: {fileID: 1391268328}
+  sun: {fileID: 410087040}
+  isDay: 0
+  circuitNodes: []
+  wireParts: []
+  gates:
+  - {fileID: 777975543}
+  - {fileID: 1817669668}
+  kingWantsGift: 0
+  monster1: 0
+  monster2: 0
+  finalOutput: 0
+  infoText: {fileID: 384076684}
+  kingsMessage: {fileID: 644660925}
 --- !u!1001 &2116423646
 PrefabInstance:
   m_ObjectHideFlags: 0

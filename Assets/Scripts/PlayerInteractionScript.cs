@@ -82,7 +82,7 @@ public class PlayerInteractionScript : MonoBehaviour
         foreach(Collider hit in hits)
         {
             // Debug.Log("Hit: " + hit.gameObject.name);
-            Debug.Log("Hit: " + hit.gameObject.name);
+            // Debug.Log("Hit: " + hit.gameObject.name);
             CircuitNode nodeFound;
 
             nodeFound = null;
@@ -104,16 +104,16 @@ public class PlayerInteractionScript : MonoBehaviour
             
         }
         currentNode = closestNode;
-        Debug.Log(closestNode);
-        Debug.Log(currentNode);
+        // Debug.Log(closestNode);
+        // Debug.Log(currentNode);
 
         if (currentNode != null) {
-            Debug.Log("closest node not null");
+            // Debug.Log("closest node not null");
             nodeSelectedText.gameObject.SetActive(true);
             nodeSelectedText.text = "Node Selected: " + currentNode.nodeName;
         } else
         {
-            Debug.Log("closest node is NULL");
+            // Debug.Log("closest node is NULL");
             nodeSelectedText.gameObject.SetActive(false);
         }
     }
@@ -258,14 +258,14 @@ public class PlayerInteractionScript : MonoBehaviour
             // }
             GateBehaviorScript script = hit.GetComponent<GateBehaviorScript>();
 
-            Debug.Log("hit: " + hit);
+            // Debug.Log("hit: " + hit);
 
             if (script == null)
             {
-                Debug.Log("tag not correct");
+                // Debug.Log("tag not correct");
                 break;
             }
-            Debug.Log("hit: " + hit);
+            // Debug.Log("hit: " + hit);
 
             messageText = script.message;
 
@@ -283,7 +283,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        Debug.Log("On Interact triggered");
+        // Debug.Log("On Interact triggered");
 
         if (!value.isPressed)
         {
@@ -302,7 +302,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
         if(charInteraction)
         {
-            Debug.Log("char interaction routine");
+            // Debug.Log("char interaction routine");
             charInteraction = false;
             StartCoroutine(CharInteractRoutine());
         } else
@@ -312,7 +312,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
         
 
-        Debug.Log("interact triggered with item");
+        // Debug.Log("interact triggered with item");
         
 
         
@@ -379,7 +379,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnGive(InputValue value)
     {
-        Debug.Log("Give triggered");
+        // Debug.Log("Give triggered");
         if (!value.isPressed)
         {
             // Debug.Log("value was not pressed");
@@ -414,20 +414,20 @@ public class PlayerInteractionScript : MonoBehaviour
         for(int i = 0; i < itemList.Count; i++)
         {
             toSend[i] = itemList[i];
-            Debug.Log("item added: " + toSend[i]);
+            // Debug.Log("item added: " + toSend[i]);
         }
 
         foreach(ItemData item in toSend)
         {
-            Debug.Log("item in toSend: " + item);
+            // Debug.Log("item in toSend: " + item);
         }
 
-        Debug.Log("toSend: " + toSend);
+        // Debug.Log("toSend: " + toSend);
         bool isGiven = currentChar.GiveGift(toSend, promptText);
         if (isGiven)
         {
             currentCharMessage = currentChar.currText;
-            Debug.Log("items wanted: " + currentChar.itemsWanted.Count);
+            // Debug.Log("items wanted: " + currentChar.itemsWanted.Count);
             for (int i = 0; i < currentChar.itemsWanted.Count; i++)
             {
                 for (int j = 0; j < currentChar.itemAmountsWanted[i]; j++)
@@ -446,7 +446,7 @@ public class PlayerInteractionScript : MonoBehaviour
         isCharInteracting = true;
         if (promptText != null)
         {
-            Debug.Log("prompt text is not null");
+            // Debug.Log("prompt text is not null");
             // promptText.gameObject.SetActive(false);
         }
         currentItem = null;
@@ -460,18 +460,18 @@ public class PlayerInteractionScript : MonoBehaviour
 
     private IEnumerator ItemInteractRoutine()
     {
-        Debug.Log("Interact routine started");
+        // Debug.Log("Interact routine started");
         isInteracting = true;
 
         if (promptText != null)
         {
             promptText.gameObject.SetActive(false);
-            Debug.Log("item interact routine set active false");
+            // Debug.Log("item interact routine set active false");
         }
 
     
         currentChar = null;
-        Debug.Log("currentItem = " + currentItem.name);
+        // Debug.Log("currentItem = " + currentItem.name);
         currentItem.Interact(inventory);
         currentItem = null;
         

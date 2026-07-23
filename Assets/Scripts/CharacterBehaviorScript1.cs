@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 
 public enum InteractionMode

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 
 public class DayNightController : MonoBehaviour
 {
@@ -10,15 +11,20 @@ public class DayNightController : MonoBehaviour
     public GameObject sun;
     public bool isDay = true;
     public TheKing theKing;
-    List<CircuitNode> circuitNodes = new List<CircuitNode>();
+    public List<CircuitNode> circuitNodes = new List<CircuitNode>();
     List<GameObject> characters = new List<GameObject>();
     public WirePlaceMode wireScript;
+    public NightBehavior nightBehavior;
+    public bool finalOutput;
+    public JudgementController judgementController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         mainCamera.enabled = true;
         nightCamera.enabled = false;
         theKing = GetComponent<TheKing>();
+        nightBehavior = GetComponent<NightBehavior>();
+        judgementController = GetComponent<JudgementController>();
     }
 
     // Update is called once per frame
@@ -42,6 +48,11 @@ public class DayNightController : MonoBehaviour
 
         Debug.Log("Night Begun");
 
+        foreach (CircuitNode node in circuitNodes)
+        {
+            node.StartNight();
+        }
+
         StartCoroutine(WaitForCircuitToFinish());
     }
 
@@ -64,23 +75,50 @@ public class DayNightController : MonoBehaviour
         {
             notDone = false;
             foreach(CircuitNode node in circuitNodes)
-        {
-            if (node.actionsCompleted == false)
             {
-                notDone = true;
+                if (node.actionsCompleted == false)
+                {
+                    notDone = true;
+                }
             }
-        }
 
             yield return new WaitForSeconds(0.5f);
         }
 
         Debug.Log("the king wants: " + theKing.wantsGift);
         // Debug.Log("final output: " + );
+        theKing.kingsMessage.SetActive(true);
+        // judgementController.CalculateEndResults(finalOutput);
 
+        // theKing.AfterNight();
         
+    }
 
-        theKing.AfterNight();
-        
+    public void ClearCircuit()
+    {
+        List<CircuitNode> toRemove = new List<CircuitNode>();
+        foreach (CircuitNode node in circuitNodes)
+        {
+            node.ClearNode();
+
+        }
+        foreach (CircuitNode gate in nightBehavior.gateList)
+        {
+            gate.ClearNode();
+        }
+
+        foreach (CircuitNode node in toRemove)
+        {
+            if (circuitNodes.Contains(node))
+            {
+                circuitNodes.Remove(node);
+            }
+            else if (nightBehavior.gateList.Contains(node))
+            {
+                nightBehavior.gateList.Remove(node);
+            }
+        }
+
     }
 
 

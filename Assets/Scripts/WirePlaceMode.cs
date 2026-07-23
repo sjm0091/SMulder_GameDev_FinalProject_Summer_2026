@@ -28,12 +28,14 @@ public class WirePlaceMode : MonoBehaviour
     public List<Button> gateButtons = new List<Button>();
     public string currentGateSelected;
     public GameObject finalNode;
+    public int numCharNodes;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spacing = 1;
         wireStart = true;
+        numCharNodes = 0;
     }
 
     // Update is called once per frame
@@ -156,6 +158,8 @@ public class WirePlaceMode : MonoBehaviour
         }
 
         GameObject charSpot = Instantiate(charSpotPrefab, pos, Quaternion.identity);
+        numCharNodes++;
+        charSpot.GetComponent<CircuitNode>().nodeName = "Character: " + charSpot.GetComponent<GateBehaviorScript>().gateType + " " + numCharNodes;
         charSpotList.Add(charSpot);
         wireStarts.Add(charSpot.transform);
     }
