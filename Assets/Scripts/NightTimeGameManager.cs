@@ -109,7 +109,7 @@ public class NightTimeGameManager : MonoBehaviour
         // Re-add gates to circuit node list
         foreach(CircuitNode gate in gates)
         {
-            circuitNodes.Add(gate);
+            // circuitNodes.Add(gate);
         }
 
         foreach (CircuitNode node in circuitNodes)
@@ -180,7 +180,11 @@ public class NightTimeGameManager : MonoBehaviour
         {
             
             node.ClearNode();
-            toRemove.Add(node);
+            if (!gates.Contains(node))
+            {
+                toRemove.Add(node);
+            }
+            
 
         }
         foreach (CircuitNode gate in gates)
@@ -194,10 +198,10 @@ public class NightTimeGameManager : MonoBehaviour
             {
                 circuitNodes.Remove(node);
             }
-            else if (gates.Contains(node))
-            {
-                gates.Remove(node);
-            }
+            // else if (gates.Contains(node))
+            // {
+            //     gates.Remove(node);
+            // }
         }
 
     }

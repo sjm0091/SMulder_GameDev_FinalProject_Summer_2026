@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEditor.Experimental.GraphView;
 
 public class WirePlaceMode : MonoBehaviour
 {
+    public Vector3 outputSiteOffset = new Vector3(0f, 0f, 0f);
     public GameObject wirePrefab;
     public GameObject wireEndPrefab;
     public GameObject charSpotPrefab;
@@ -109,14 +111,37 @@ public class WirePlaceMode : MonoBehaviour
 
     public bool PlaceWireEnd(Vector3 pos, CircuitNode node)
     {
+        Debug.Log("Place Wire End Triggered");
         if (!wireMode)
         {
             return false;
         }
 
         
+        if (node.outputs.Count >= node.maxOutputs || node.outputSites.Count <= 0)
+        {
+            return false;
+        }
 
-        GameObject thisWire = Instantiate(wireEndPrefab, pos, Quaternion.identity);
+        int outputIndex = 0;
+        for (int i = 0; i < node.outputSites.Count; i++)
+        {
+            if (i == node.outputs.Count)
+            {
+                outputIndex = i;
+                break;
+            }
+        }
+
+
+        GameObject parent = node.outputSites[outputIndex];
+
+        GameObject thisWire = Instantiate(wireEndPrefab, pos, Quaternion.identity, parent.transform);
+        thisWire.transform.position = parent.transform.position + outputSiteOffset;
+
+        Debug.Log("thisWire: " + thisWire.name);
+        Debug.Log("Parent: " + parent.name);
+        Debug.Log("WireStart = " + wireStart);
 
         if (wireStart)
         {
@@ -257,6 +282,7 @@ public class WirePlaceMode : MonoBehaviour
         {
             finalNode.GetComponent<CircuitNode>().finalOutput = false;
         }
+
         finalNode = node;
         node.GetComponent<CircuitNode>().finalOutput = true;
 

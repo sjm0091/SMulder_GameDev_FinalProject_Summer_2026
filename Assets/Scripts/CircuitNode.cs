@@ -14,15 +14,19 @@ public class CircuitNode : MonoBehaviour
 
     public Transform wireConnection;
     public List<CircuitNode> inputs = new List<CircuitNode>();
+    public List<GameObject> outputSites = new List<GameObject>();
     public List<CircuitNode> outputs = new List<CircuitNode>();
     public bool hasInputLimit = true;
     public int inputMax = 2;
+    public int maxOutputs = 5;
     public bool hasOutputLimit = false;
     public int outputMax = 2;
     private GateBehaviorScript thisGate;
     // public DayNightController dayNightController;
     private bool nightOn = false;
     public bool actionsCompleted = false;
+
+    
     // public TheKing theKing;
 
     public NightTimeGameManager nightTimeGameManager;
@@ -37,6 +41,7 @@ public class CircuitNode : MonoBehaviour
 
         // dayNightController.circuitNodes.Add(this);
         nightTimeGameManager.circuitNodes.Add(this);
+
     }
 
     // Update is called once per frame

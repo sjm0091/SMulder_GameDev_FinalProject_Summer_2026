@@ -116,6 +116,7 @@ public class PlayerInteractionScript : MonoBehaviour
             // Debug.Log("closest node is NULL");
             nodeSelectedText.gameObject.SetActive(false);
         }
+
     }
 
     public void FindNearbyItem(bool character = false)
@@ -337,6 +338,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnWireEnd(InputValue value)
     {
+        Debug.Log("On Wire End");
         if (!value.isPressed)
         {
             return;
@@ -351,7 +353,13 @@ public class PlayerInteractionScript : MonoBehaviour
 
         if (placeStart)
         {
-            start = position;
+            for (int i = 0; i < currentNode.outputSites.Count; i++)
+            {
+                if (i == currentNode.outputs.Count)
+                {
+                    start = currentNode.outputSites[i].transform.position;
+                }
+            }
         }
         else
         {
@@ -359,6 +367,7 @@ public class PlayerInteractionScript : MonoBehaviour
         }
 
         gameManager.PlaceWireEnd(position, currentNode);
+        Debug.Log("wire end placed");
 
 
         placeStart = !placeStart;
@@ -482,6 +491,73 @@ public class PlayerInteractionScript : MonoBehaviour
         isInteracting = false;
         
     }
+
+    // public void OnSetWireEnd(InputValue value)
+    // {
+    //     Vector2 vectorValue = value.Get<Vector2>();
+    //     if (vectorValue.x == 0 && vectorValue.y == 0)
+    //     {
+    //         return;
+    //     }
+        
+    //     Debug.Log("on set wire end triggered");
+    //     // if (!value.isPressed)
+    //     // {
+    //     //     return;
+    //     // }
+
+    //     // for (int i = 0; i < currentNode.wireOutputs; i++ )
+    //     // {
+    //     //     if (currentNode.wireOutputs < currentNode.maxOutputs)
+    //     //     {
+                
+    //     //     }
+    //     // }
+
+    //     Vector3 position = currentNode.wireConnection.position;
+        
+
+    //     // if (placeStart)
+    //     // {
+    //     //     start = position;
+    //     // }
+    //     // else
+    //     // {
+    //     //     end = position;
+    //     // }
+
+    //     // gameManager.PlaceWireEnd(position, currentNode);
+
+        
+
+    //     Debug.Log(vectorValue);
+    //     bool isWireStart;
+    //     if (vectorValue.y > 0 && placeStart)
+    //     {
+    //         isWireStart = true;
+    //         Debug.Log("set start");
+    //     }
+    //     else if (vectorValue.y < 0 && !placeStart)
+    //     {
+    //         Debug.Log("set end");
+    //         isWireStart = false;
+    //     }
+    //     else
+    //     {
+    //         return;
+    //     }
+
+    //     if (isWireStart) // wire start 
+    //     {
+    //         gameManager.PlaceWireEnd(position, currentNode, true);
+    //     } 
+    //     else if (!isWireStart) // wire end
+    //     {
+    //         gameManager.PlaceWireEnd(position, currentNode, false);
+    //     }
+
+    //     isWireStart = !isWireStart;
+    // }
 
     public void OnSetFinal(InputValue value)
     {
