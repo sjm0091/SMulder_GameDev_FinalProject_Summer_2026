@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -6,10 +7,14 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEditor.Experimental.GraphView;
+using Unity.VisualScripting;
 
 public class WirePlaceMode : MonoBehaviour
 {
     public Vector3 outputSiteOffset = new Vector3(0f, 0f, 0f);
+    public TextMeshProUGUI failText;
+    public GameObject failTextPanel;
+    public float failTextTime = 3f;
     public GameObject wirePrefab;
     public GameObject wireEndPrefab;
     public GameObject charSpotPrefab;
@@ -63,8 +68,10 @@ public class WirePlaceMode : MonoBehaviour
 
     public void PlaceWire(Vector3 start, Vector3 end)
     {
+        Debug.Log("reached place wire");
         if (!wireMode)
         {
+            Debug.Log("not wire mode");
             return;
         }
 
@@ -72,19 +79,26 @@ public class WirePlaceMode : MonoBehaviour
         {
             if (key.position == start)
             {
+                Debug.Log("wire not placed. key.position == start");
                 return;
             }
         }
+
+        Debug.Log("after foreach");
 
         Vector3 direction = (end - start).normalized;
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction);
 
         Vector3 currentSpot = start;
+        Debug.Log("currentSpot = " + currentSpot);
+        Debug.Log("currentSpot == end: " + (currentSpot == end));
         bool first = true;
         while (currentSpot != end)
         {
+            Debug.Log("while loop");
             
             GameObject wirePart = Instantiate(wirePrefab, currentSpot, rotation);
+            Debug.Log("Instantiated wirepart: " + wirePart.name);
             if (first)
             {
                 wireDict[wirePart.transform] = new List<Transform>();
@@ -114,30 +128,85 @@ public class WirePlaceMode : MonoBehaviour
         Debug.Log("Place Wire End Triggered");
         if (!wireMode)
         {
+            Debug.Log("Not wire mode");
+            return false;
+        }
+
+        if (wireStart && node.outputsFull)
+        {
+            Debug.Log("Outputs full");
+            SetFailText("Ouputs full");
+            return false;
+        }
+
+        if (!wireStart && node.inputsFull)
+        {
+            Debug.Log("Inputs full");
+            SetFailText("Inputs full");
             return false;
         }
 
         
-        if (node.outputs.Count >= node.maxOutputs || node.outputSites.Count <= 0)
+        if (wireStart && node.outputSites.Count <= 0)
         {
+            Debug.Log("Not first if");
+            SetFailText("Ouputs full");
             return false;
         }
 
-        int outputIndex = 0;
-        for (int i = 0; i < node.outputSites.Count; i++)
+        if (!wireStart && (node.inputs.Count >= node.inputMax || node.inputSites.Count <= 0))
         {
-            if (i == node.outputs.Count)
+            Debug.Log("Not second if");
+            SetFailText("Inputs full");
+            return false;
+        }
+
+        if ((!wireStart && CheckIfIOfull(node, true)) || (wireStart && CheckIfIOfull(node, false)))
+        {
+            Debug.Log("askfh;asdlkhfjo;adjkf;l");
+            Debug.Log("wireStart: " + wireStart);
+            string newText = wireStart ? "Outputs full" : "Inputs full";
+            StartCoroutine(SetFailText(newText));
+            return false;
+        }
+
+        GameObject parent;
+        if (wireStart)
+        {   
+            Debug.Log("Output finding parent");
+            int outputIndex = 0;
+            for (int i = 0; i < node.outputSites.Count; i++)
             {
-                outputIndex = i;
-                break;
+                if (i == node.outputs.Count)
+                {
+                    outputIndex = i;
+                    break;
+                }
             }
+            parent = node.outputSites[outputIndex];
+        } else
+        {
+            Debug.Log("Input finding parent");
+            int inputIndex = 0;
+            for (int i = 0; i < node.inputSites.Count; i++)
+            {
+                if (i == node.inputs.Count)
+                {
+                    inputIndex = i;
+                    break;
+                }
+            }
+            parent = node.inputSites[inputIndex];
         }
 
 
-        GameObject parent = node.outputSites[outputIndex];
+        
 
         GameObject thisWire = Instantiate(wireEndPrefab, pos, Quaternion.identity, parent.transform);
         thisWire.transform.position = parent.transform.position + outputSiteOffset;
+
+        thisWire.transform.SetParent(node.gameObject.transform);
+        parent.SetActive(false);
 
         Debug.Log("thisWire: " + thisWire.name);
         Debug.Log("Parent: " + parent.name);
@@ -173,6 +242,36 @@ public class WirePlaceMode : MonoBehaviour
 
         wireStart = !wireStart;
         return true;
+    }
+
+    public bool CheckIfIOfull(CircuitNode node, bool input)
+    {
+        Debug.Log("Check if io filled triggered");
+        bool full = true;
+        if (input)
+        {
+            full = true;
+            foreach (GameObject i in node.inputSites)
+            {
+                if (i.activeSelf)
+                {
+                    full = false;
+                }
+            }
+        }
+        else if (!input)
+        {
+            full = true;
+            foreach (GameObject i in node.outputSites)
+            {
+                if (i.activeSelf)
+                {
+                    full = false;
+                }
+            }
+        }
+
+        return full;
     }
 
     public void PlaceChar(Vector3 pos)
@@ -290,6 +389,24 @@ public class WirePlaceMode : MonoBehaviour
 
         Debug.Log("FinalNode: " + finalNode.name);
 
+    }
+
+    public IEnumerator SetFailText(string text)
+    {
+        failText.text = text;
+        failText.gameObject.SetActive(true);
+        
+        yield return new WaitForSeconds(failTextTime);
+
+        float fullAlpha = 1;
+        while (fullAlpha > 0)
+        {
+            Image failImg = failTextPanel.GetComponent<Image>();
+            failImg.color = new Color(failImg.color.r, failImg.color.b, failImg.color.g, fullAlpha--);
+        }
+
+        failText.gameObject.SetActive(false);
+        failText.text = "";
     }
 
     

@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class JudgementController : MonoBehaviour
 {
@@ -24,13 +26,48 @@ public class JudgementController : MonoBehaviour
 
     public void CalculateEndResults(bool finalOutput, bool kingWantsGift)
     {
-        
-        bool survivedNight = CheckIfSurvived(finalOutput, kingWantsGift);
+
+        bool survivedNight = CheckIfSurvivedVisit(finalOutput, kingWantsGift);
         string judgementText = DetermineJudgementText(survivedNight, kingWantsGift);
 
         bannerText.text = judgementText;
+    }
 
-        switch (survivedNight)
+    private bool CheckIfSurvivedVisit(bool finalOutput, bool kingWantsGift)
+    {
+        return finalOutput == kingWantsGift;
+    } 
+
+    private string DetermineJudgementText(bool survivedVisit, bool kingWantsGift)
+    {
+        string pleasedText = survivedVisit ? " pleased with his ": " displeased with his ";
+        string giftText = ((kingWantsGift && survivedVisit) || (!kingWantsGift && !survivedVisit)) ? "gift" : "lack of a gift";
+        string punctuationText = survivedVisit ? "!" : "...";
+
+        string judgementText = "The King is" + pleasedText + giftText + punctuationText;
+
+        return judgementText;
+    }
+
+    public string DetermineFinalJudgementText(bool survivedNight)
+    {
+        string text = survivedNight ? "Congratulations! The King approves of your presence in his kingdom!" : "The King disapproves of your presence. However, you may stay, for now...";
+
+        return text;
+    }
+
+    public KeyValuePair<bool, string> CheckIfSurvivedNight(List<bool> survivedList)
+    {
+        bool survived = true;
+        foreach (bool pleasedKing in survivedList)
+        {
+            if (!pleasedKing)
+            {
+                survived = false;
+            }
+        }
+
+        switch (survived)
         {
             case true:
                 scoreKeeperManager.AddNightSurvived();
@@ -39,21 +76,14 @@ public class JudgementController : MonoBehaviour
                 scoreKeeperManager.RemoveLife();
                 break;
         }
-    }
 
-    private bool CheckIfSurvived(bool finalOutput, bool kingWantsGift)
-    {
-        return finalOutput == kingWantsGift;
-    } 
+        Debug.Log("Survived = " + survived);
 
-    private string DetermineJudgementText(bool survived, bool kingWantsGift)
-    {
-        string pleasedText = survived ? " pleased with his ": " displeased with his ";
-        string giftText = ((kingWantsGift && survived) || (!kingWantsGift && !survived)) ? " gift " : " lack of a gift ";
-        string punctuationText = survived ? "!" : "...";
+        string text = DetermineFinalJudgementText(survived);
 
-        string judgementText = "The King is " + pleasedText + giftText + punctuationText;
+        KeyValuePair<bool, string> response = new KeyValuePair<bool, string>(survived, text);
 
-        return judgementText;
+
+        return response;
     }
 }

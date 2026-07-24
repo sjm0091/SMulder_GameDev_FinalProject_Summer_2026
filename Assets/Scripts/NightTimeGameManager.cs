@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+// using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class NightTimeGameManager : MonoBehaviour
 {
@@ -42,11 +45,45 @@ public class NightTimeGameManager : MonoBehaviour
     public TextMeshProUGUI infoText;
     public GameObject kingsMessage;
 
+
+    // Visits
+    public List<bool> wantsGiftByVisit = new List<bool>();
+    public int numVisits = 4;
+    public int visitCount = 0;
+    public List<bool> kingPleasedPerVisit = new List<bool>();
+    public GameObject endOfDayPanel;
+    public TextMeshProUGUI endOfDayMessage;
+    public GameObject infoPanelGrid;
+    public List<Image> gridCellsByGate = new List<Image>();
+    public List<Image> outputGridCells = new List<Image>();
+    public Sprite giftSprite;
+    public Sprite noGiftSprite;
+
+    // Outputs
+    public List<bool[]> outputPossibilities = new List<bool[]>();
+    
+
     public void Start()
     {
+        bool[] list1 = {true, false, false, false};
+        bool[] list2 = {false, false, false, true};
+        bool[] list3 = {true, false, false, true};
+        bool[] list4 = {false, true, true, false};
+        bool[] list5 = {false, true, true, true};
+        bool[] list6 = {true, true, true, false};
+
+        outputPossibilities.Add(list1);
+        outputPossibilities.Add(list2);
+        outputPossibilities.Add(list3);
+        outputPossibilities.Add(list4);
+        outputPossibilities.Add(list5);
+        outputPossibilities.Add(list6);
+
         wireScript = GetComponent<WirePlaceMode>();
         judgementController = GetComponent<JudgementController>();
-        GenerateMonsters();
+        // GenerateMonsters();
+        GenerateOutputs();
+        visitCount = 0;
     }
    
     
@@ -89,6 +126,100 @@ public class NightTimeGameManager : MonoBehaviour
 
     }
 
+    public void SetGateInputs(int visitNum)
+    {
+        Debug.Log("Set Gate Inputs triggered. Visit #" + visitNum);
+        switch(visitNum)
+        {
+            case 1:
+                gates[0].AddInputValue(false);
+                gates[0].AddInputValue(false);
+                gates[1].AddInputValue(false);
+                gates[1].AddInputValue(false);
+                break;
+            case 2:
+                gates[0].AddInputValue(false);
+                gates[0].AddInputValue(false);
+                gates[1].AddInputValue(true);
+                gates[1].AddInputValue(true);
+                
+                break;
+            case 3:
+                gates[0].AddInputValue(true);
+                gates[0].AddInputValue(true);
+                gates[1].AddInputValue(false);
+                gates[1].AddInputValue(false);
+                break;
+            case 4:
+                gates[0].AddInputValue(true);
+                gates[0].AddInputValue(true);
+                gates[1].AddInputValue(true);
+                gates[1].AddInputValue(true);
+                break;
+        }
+
+        judgementController.gate1HasGift = gates[0];
+        judgementController.gate2HasGift = gates[1];
+
+    }
+
+    // Determines on which visits the kind wants a gift
+    public void GenerateOutputs()
+    {
+        int index = Random.Range(0, outputPossibilities.Count - 1);
+        bool[] outputList = outputPossibilities[index];
+
+        List<bool> giftsByVisit = new List<bool>();
+        for (int i = 0; i < outputList.Length; i++)
+        {
+            // bool wantsGift = Random.value > 0.5f ? true : false;
+
+            bool wantsGift = outputList[i];
+
+            Sprite newSprite = wantsGift ? giftSprite : noGiftSprite;
+            outputGridCells[i].sprite = newSprite;
+             
+            giftsByVisit.Add(wantsGift);
+        }
+
+        wantsGiftByVisit = giftsByVisit; 
+    }
+
+    public void RunThroughVisit()
+    {
+        Debug.Log("numVisits: " + numVisits);
+        Debug.Log("visitCount: " + visitCount);
+        if (visitCount >= numVisits)
+        {
+            
+            KeyValuePair<bool, string> response = judgementController.CheckIfSurvivedNight(kingPleasedPerVisit);
+
+            bool survived = response.Key;
+            SetEndOfDayText(response.Value);
+            kingsMessage.SetActive(false);
+            return;
+        }
+        // visitCount = 0;
+        
+        SetGateInputs(visitCount + 1);
+        kingWantsGift = wantsGiftByVisit[visitCount];
+        Debug.Log("Visit " + visitCount + ":");
+        foreach (CircuitNode node in circuitNodes)
+        {
+            node.StartNight();
+        }
+
+        StartCoroutine(WaitForCircuitToFinish());
+        visitCount++;
+        
+    }
+
+    public void SetEndOfDayText(string text)
+    {
+        endOfDayPanel.SetActive(true);
+        endOfDayMessage.text = text;
+    }
+
 
     // Begins nighttime procedures -- triggered by button
     public void StartNight()
@@ -106,18 +237,20 @@ public class NightTimeGameManager : MonoBehaviour
 
         Debug.Log("Night Begun");
 
+        RunThroughVisit();
+
         // Re-add gates to circuit node list
-        foreach(CircuitNode gate in gates)
-        {
-            // circuitNodes.Add(gate);
-        }
+        // foreach(CircuitNode gate in gates)
+        // {
+        //     // circuitNodes.Add(gate);
+        // }
 
-        foreach (CircuitNode node in circuitNodes)
-        {
-            node.StartNight();
-        }
+        // foreach (CircuitNode node in circuitNodes)
+        // {
+        //     node.StartNight();
+        // }
 
-        StartCoroutine(WaitForCircuitToFinish());
+        // StartCoroutine(WaitForCircuitToFinish());
     }
 
     // Begins day in main scene
@@ -130,15 +263,35 @@ public class NightTimeGameManager : MonoBehaviour
         isDay = true;
         sun.gameObject.SetActive(true);
 
+        GenerateOutputs();
 
+
+    }
+
+    public void OnClickNextVisit()
+    {
+        foreach (CircuitNode node in circuitNodes)
+        {
+            node.ClearNodeAfterVisit();
+        }
+
+        kingsMessage.SetActive(false);
+
+        RunThroughVisit();
+
+        // if (visitCount >= numVisits)
+        // {
+            
+        // }
     }
 
     // Starts next day -- triggered by button
     public void OnClickNextDay()
     {
         ClearCircuit();
-        GenerateMonsters();
+        // GenerateMonsters();
         kingsMessage.SetActive(false);
+        endOfDayPanel.SetActive(false);
         wireScript.ClearArea();
         wireScript.numCharNodes = 0;
         StartDay();
@@ -167,6 +320,8 @@ public class NightTimeGameManager : MonoBehaviour
         // Debug.Log("final output: " + );
         kingsMessage.SetActive(true);
         judgementController.CalculateEndResults(finalOutput, kingWantsGift);
+        kingPleasedPerVisit.Add(kingWantsGift == finalOutput);
+        
 
         // theKing.AfterNight();
         
@@ -203,6 +358,7 @@ public class NightTimeGameManager : MonoBehaviour
             //     gates.Remove(node);
             // }
         }
+        visitCount = 0;
 
     }
 }

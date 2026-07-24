@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 public class CircuitNode : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class CircuitNode : MonoBehaviour
     public Transform wireConnection;
     public List<CircuitNode> inputs = new List<CircuitNode>();
     public List<GameObject> outputSites = new List<GameObject>();
+    public List<GameObject> inputSites = new List<GameObject>();
     public List<CircuitNode> outputs = new List<CircuitNode>();
     public bool hasInputLimit = true;
     public int inputMax = 2;
@@ -25,6 +27,8 @@ public class CircuitNode : MonoBehaviour
     // public DayNightController dayNightController;
     private bool nightOn = false;
     public bool actionsCompleted = false;
+    public bool inputsFull;
+    public bool outputsFull;
 
     
     // public TheKing theKing;
@@ -41,6 +45,19 @@ public class CircuitNode : MonoBehaviour
 
         // dayNightController.circuitNodes.Add(this);
         nightTimeGameManager.circuitNodes.Add(this);
+
+        foreach (GameObject site in outputSites)
+        {
+            site.SetActive(true);
+        }
+
+        foreach (GameObject site in inputSites)
+        {
+            site.SetActive(true);
+        }
+
+        inputsFull = false;
+        outputsFull = false;
 
     }
 
@@ -65,6 +82,11 @@ public class CircuitNode : MonoBehaviour
         }
 
         inputs.Add(node);
+
+        if (inputs.Count == inputSites.Count)
+        {
+            inputsFull = true;
+        }
         return true;
     }
 
@@ -108,6 +130,11 @@ public class CircuitNode : MonoBehaviour
         }
 
         outputs.Add(node);
+
+        if (outputs.Count == outputSites.Count)
+        {
+            outputsFull = true;
+        }
         return true;
     }
 
@@ -134,7 +161,26 @@ public class CircuitNode : MonoBehaviour
         actionsCompleted = false;
         nightOn = false;
 
+        foreach (GameObject site in outputSites)
+        {
+            site.SetActive(true);
+        }
+
+        foreach (GameObject site in inputSites)
+        {
+            site.SetActive(true);
+        }
+
         Debug.Log(nodeName + " cleared successfully");
+    }
+
+    public void ClearNodeAfterVisit()
+    {
+        output = false;
+        actionsCompleted = false;
+        inputList.Clear();
+
+        Debug.Log(nodeName + "cleared after visit successfully");
     }
 
 

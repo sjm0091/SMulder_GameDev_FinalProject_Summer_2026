@@ -34,6 +34,8 @@ public class PlayerInteractionScript : MonoBehaviour
     private bool isInteracting = false;
     private bool charInteraction = false;
     private bool isCharInteracting = false;
+    private bool noStart = true;
+    private bool noEnd = true;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -327,11 +329,27 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             return;
         }
+
+        if (noStart)
+        {
+            Debug.Log("noStart");
+            return;
+        }
+
+        if (noEnd)
+        {
+            Debug.Log("noEnd");
+            return;
+        }
         
         if (end != null && start != null)
         {
+            Debug.Log("wire placed");
             gameManager.PlaceWire(start, end);
+            noStart = true;
         }
+
+        
 
         
     }
@@ -350,24 +368,66 @@ public class PlayerInteractionScript : MonoBehaviour
 
         Vector3 position = currentNode.wireConnection.position;
         
-
+        // bool foundOpen = false;
         if (placeStart)
         {
+            
             for (int i = 0; i < currentNode.outputSites.Count; i++)
             {
                 if (i == currentNode.outputs.Count)
                 {
                     start = currentNode.outputSites[i].transform.position;
+                    // foundOpen = true;
                 }
             }
+            noStart = false;
+            noEnd = true;
         }
         else
         {
-            end = position;
+            for (int i = 0; i < currentNode.inputSites.Count; i++)
+            {
+                if (i == currentNode.inputs.Count)
+                {
+                    end = currentNode.inputSites[i].transform.position;
+                    // foundOpen = true;
+                }
+            }
+            noEnd = false;
         }
 
-        gameManager.PlaceWireEnd(position, currentNode);
-        Debug.Log("wire end placed");
+        // if (!foundOpen)
+        // {
+        //     return;
+        // }
+
+        // if (placeStart)
+        // {
+        //     noStart = false;
+        //     noEnd = true;
+        // } else
+        // {
+        //     noEnd = false;
+        // }
+
+        bool finished = gameManager.PlaceWireEnd(position, currentNode);
+        if (finished)
+        {
+            Debug.Log("wire end placed");
+        } else
+        {
+            Debug.Log("failed to place wire end");
+            if (placeStart)
+            {
+                noStart = true;
+                noEnd = false;
+            } else
+            {
+                noEnd = true;
+            }
+            return;
+        }
+        
 
 
         placeStart = !placeStart;
