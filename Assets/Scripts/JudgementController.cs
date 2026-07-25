@@ -7,6 +7,7 @@ public class JudgementController : MonoBehaviour
 {
     // public TextMeshProUGUI judgementMessage;
     public ScoreKeeper scoreKeeperManager;
+    public NPCController npcController;
     // public bool finalOutput;
     public bool gate1HasGift; // if false -> monster ate gift
     public bool gate2HasGift; // if false -> monster ate gift

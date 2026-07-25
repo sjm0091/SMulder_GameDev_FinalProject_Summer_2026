@@ -283,6 +283,7 @@ public class WirePlaceMode : MonoBehaviour
 
         GameObject charSpot = Instantiate(charSpotPrefab, pos, Quaternion.identity);
         numCharNodes++;
+        Debug.Log("placing char: " + charSpot.GetComponent<GateBehaviorScript>().gateType);
         charSpot.GetComponent<CircuitNode>().nodeName = "Character: " + charSpot.GetComponent<GateBehaviorScript>().gateType + " " + numCharNodes;
         charSpotList.Add(charSpot);
         wireStarts.Add(charSpot.transform);
@@ -309,7 +310,7 @@ public class WirePlaceMode : MonoBehaviour
         GameObject item = null;
         for (int i = 0; i < charSpotPrefabs.Count; i++)
         {
-            if (charSpotPrefabs[i].GetComponent<ItemData>().itemName == value)
+            if (charSpotPrefabs[i].GetComponent<InteractableObject>().itemData.itemName == value)
             {
                 item = charSpotPrefabs[i];
             }
@@ -326,53 +327,56 @@ public class WirePlaceMode : MonoBehaviour
 
     public void SetNANDButton()
     {
-        currentGateSelected = "NANDSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "NAND";
+        SetCharPrefab(1);
     }
     public void SetNORButton()
     {
-        currentGateSelected = "NORSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "NOR";
+        SetCharPrefab(2);
     }
     public void SetANDButton()
     {
-        currentGateSelected = "ANDSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "AND";
+        SetCharPrefab(0);
     }
     public void SetNOTButton()
     {
-        currentGateSelected = "NOTSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "NOT";
+        SetCharPrefab(3);
     }
     public void SetXORButton()
     {
-        currentGateSelected = "XORSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "XOR";
+        SetCharPrefab(6);
     }
     public void SetXNORButton()
     {
-        currentGateSelected = "XNORSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "XNOR";
+        SetCharPrefab(5);
     }
     public void SetORButton()
     {
-        currentGateSelected = "ORSpot";
-        SetCharPrefab(currentGateSelected);
+        currentGateSelected = "OR";
+        SetCharPrefab(4);
     }
 
-    public void SetCharPrefab(string value)
+    public void SetCharPrefab(int index)
     {
-        Debug.Log("Set to: " + value);
-        GameObject item = null;
-        for (int i = 0; i < charSpotPrefabs.Count; i++)
-        {
-            if (charSpotPrefabs[i].GetComponent<InteractableObject>().itemData.itemName == value)
-            {
-                item = charSpotPrefabs[i];
-            }
-        }
-
+        // Debug.Log("Set to: " + value);
+        // GameObject item = null;
+        // for (int i = 0; i < charSpotPrefabs.Count; i++)
+        // {
+        //     if (charSpotPrefabs[i].GetComponent<InteractableObject>().itemData.gateName == value)
+        //     {
+        //         item = charSpotPrefabs[i];
+        //     }
+        // }
+        GameObject item = charSpotPrefabs[index];
         charSpotPrefab = item;
+        Debug.Log("Actually set to: " + charSpotPrefab.GetComponent<InteractableObject>().itemData.gateName);
+
+        
     }
 
     public void SetFinalNode(GameObject node)

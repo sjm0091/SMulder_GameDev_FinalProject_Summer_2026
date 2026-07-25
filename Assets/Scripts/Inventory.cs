@@ -91,7 +91,7 @@ public class Inventory : MonoBehaviour
                     button.gameObject.SetActive(true);
                     if (charPrefab != null)
                     {
-                        Debug.Log("Adding char prefab");
+                        Debug.Log("Adding char prefab: " + item.itemData.gateName);
                         wireScript.charSpotPrefab = charPrefab;
                     }
                     

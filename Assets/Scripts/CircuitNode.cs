@@ -201,6 +201,11 @@ public class CircuitNode : MonoBehaviour
     {
         Debug.Log("CircuitRunRoutine Begin: " + nodeName);
         Debug.Log("Final output = " + finalOutput + ", " + nodeName);
+        Debug.Log("current inputs: ");
+        foreach (bool input in inputList)
+        {
+            Debug.Log(input);
+        }
         while (inputList.Count != inputMax)
         {
             yield return new WaitForSeconds(0.5f);

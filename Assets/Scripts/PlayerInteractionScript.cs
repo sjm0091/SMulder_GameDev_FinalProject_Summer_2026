@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 public class PlayerInteractionScript : MonoBehaviour
 {
     public GateBehaviorScript character;
+    public NPCController npcController;
     private float minDistance = 5f;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
@@ -506,6 +507,8 @@ public class PlayerInteractionScript : MonoBehaviour
                 
             }
             inventory.AddItem(currentChar.characterSpot, 1, currentChar.charSpotPrefab);
+            // npcController.AddCharacter(currentChar.charSpotPrefab);
+            npcController.AddCharSpotButton(currentChar.gameObject.GetComponent<GateBehaviorScript>().gateType.ToString());
         }
     }
 
@@ -622,6 +625,11 @@ public class PlayerInteractionScript : MonoBehaviour
     public void OnSetFinal(InputValue value)
     {
         if (!value.isPressed)
+        {
+            return;
+        }
+
+        if (currentNode == null)
         {
             return;
         }
