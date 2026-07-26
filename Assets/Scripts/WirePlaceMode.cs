@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEditor.Experimental.GraphView;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
 
 public class WirePlaceMode : MonoBehaviour
 {
@@ -29,13 +30,16 @@ public class WirePlaceMode : MonoBehaviour
     public List<GameObject> charSpotList = new List<GameObject>();
     private float spacing;
     private Transform currentKey;
-    private bool wireStart = true;
+    public bool wireStart = true;
     private GameObject currentWireStart;
     private CircuitNode currentFirstNode;
     public List<Button> gateButtons = new List<Button>();
     public string currentGateSelected;
     public GameObject finalNode;
     public int numCharNodes;
+    public AudioSource audioSource;
+    public AudioClip ButtonClickClip;
+    public AudioClip errorClip;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -56,6 +60,7 @@ public class WirePlaceMode : MonoBehaviour
 
     public void ToggleWireMode()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         wireMode = !wireMode;
         if (wireMode)
         {
@@ -446,6 +451,7 @@ public class WirePlaceMode : MonoBehaviour
 
     public IEnumerator SetFailText(string text)
     {
+        audioSource.PlayOneShot(errorClip);
         Debug.Log("Set fail text triggered");
         failText.text = text;
         failTextPanel.SetActive(true);

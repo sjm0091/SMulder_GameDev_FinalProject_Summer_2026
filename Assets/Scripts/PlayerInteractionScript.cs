@@ -14,6 +14,7 @@ public class PlayerInteractionScript : MonoBehaviour
 {
     public GateBehaviorScript character;
     public NPCController npcController;
+    public NightTimeGameManager nightTimeGameManager;
     private float minDistance = 5f;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
@@ -27,6 +28,7 @@ public class PlayerInteractionScript : MonoBehaviour
     public Inventory inventory;
     public WirePlaceMode gameManager;
     public TextMeshProUGUI nodeSelectedText;
+    public GameObject nodeSelectedTextPanel;
 
     //wire placement
     private Vector3 start;
@@ -40,6 +42,14 @@ public class PlayerInteractionScript : MonoBehaviour
     private bool noStart = true;
     private bool noEnd = true;
     public List<GameObject> wireEnds = new List<GameObject>();
+
+    //audio
+    public AudioSource audioSource;
+    public AudioClip PlaceClip;
+    public AudioClip InventoryClip;
+    public AudioClip CollectClip;
+    public AudioClip TalkClip;
+    public AudioClip GiveClip;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -115,11 +125,13 @@ public class PlayerInteractionScript : MonoBehaviour
 
         if (currentNode != null) {
             // Debug.Log("closest node not null");
+            nodeSelectedTextPanel.SetActive(true);
             nodeSelectedText.gameObject.SetActive(true);
             nodeSelectedText.text = "Node Selected: " + currentNode.nodeName;
         } else
         {
             // Debug.Log("closest node is NULL");
+            nodeSelectedTextPanel.SetActive(false);
             nodeSelectedText.gameObject.SetActive(false);
         }
 
@@ -306,6 +318,7 @@ public class PlayerInteractionScript : MonoBehaviour
             // Debug.Log("current item is null or isInteracting");
             return;
         }
+        audioSource.PlayOneShot(TalkClip);
 
         
         
@@ -329,6 +342,34 @@ public class PlayerInteractionScript : MonoBehaviour
         // messageText = "" TODO: implement random wants message
 
     }
+
+    // public void OnDeleteNode(InputValue value)
+    // {
+    //     Debug.Log("OnDeleteNode");
+    //     if (!value.isPressed)
+    //     {
+    //         return;
+    //     }
+
+    //     if (currentNode == null)
+    //     {
+    //         Debug.Log("No wire selected");
+    //         return;
+    //     }
+
+    //     List<GameObject> toDestroy = new List<GameObject>();
+    //     foreach(GameObject wire in currentNode.wireEndsList)
+    //     {
+    //         toDestroy.Add(wire);
+    //     }
+    //     for (int i = 0; i < toDestroy.Count; i++)
+    //     {
+    //         Destroy(toDestroy[i]);
+    //     }
+
+    //     nightTimeGameManager.circuitNodes.Remove(currentNode);
+    //     Destroy(currentNode.gameObject);
+    // }
 
     public void OnDeleteWire(InputValue value)
     {
@@ -360,6 +401,7 @@ public class PlayerInteractionScript : MonoBehaviour
             Debug.Log("No wire on this node");
             return;
         }
+        audioSource.PlayOneShot(PlaceClip);
 
         bool deleteComplete = gameManager.DeleteWirePart(closestWireEnd);
 
@@ -387,6 +429,7 @@ public class PlayerInteractionScript : MonoBehaviour
         
         if (end != null && start != null)
         {
+            audioSource.PlayOneShot(PlaceClip);
             Debug.Log("wire placed");
             gameManager.PlaceWire(start, end);
             noStart = true;
@@ -452,7 +495,7 @@ public class PlayerInteractionScript : MonoBehaviour
         // {
         //     noEnd = false;
         // }
-
+        audioSource.PlayOneShot(PlaceClip);
         bool finished = gameManager.PlaceWireEnd(position, currentNode);
         if (finished)
         {
@@ -483,6 +526,7 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             return;
         }
+        audioSource.PlayOneShot(PlaceClip);
 
         Vector3 position = transform.position;
         position = transform.position + (transform.forward * placementOffset);
@@ -492,6 +536,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnGive(InputValue value)
     {
+        audioSource.PlayOneShot(GiveClip);
         // Debug.Log("Give triggered");
         if (!value.isPressed)
         {
@@ -551,7 +596,7 @@ public class PlayerInteractionScript : MonoBehaviour
             }
             inventory.AddItem(currentChar.characterSpot, 1, currentChar.charSpotPrefab);
             // npcController.AddCharacter(currentChar.charSpotPrefab);
-            npcController.AddCharSpotButton(currentChar.gameObject.GetComponent<GateBehaviorScript>().gateType.ToString());
+            npcController.AddCharSpotButton(currentChar.gameObject.GetComponent<GateBehaviorScript>().gateType);
         }
     }
 
@@ -584,6 +629,7 @@ public class PlayerInteractionScript : MonoBehaviour
             promptTextPanel.SetActive(false);
             // Debug.Log("item interact routine set active false");
         }
+        audioSource.PlayOneShot(CollectClip);
 
     
         currentChar = null;
@@ -668,6 +714,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnSetFinal(InputValue value)
     {
+        audioSource.PlayOneShot(GiveClip);
         if (!value.isPressed)
         {
             return;

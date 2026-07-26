@@ -29,8 +29,8 @@ public class CharacterBehaviorScript1 : MonoBehaviour
 
     public GameObject mapIconPrefab;
     public GameObject myMapIcon;
-    public Camera canvasCamera; // set by NPCController
-    public Canvas mapCanvas; // set by NPCController
+    // public Camera canvasCamera; // set by NPCController
+    // public Canvas mapCanvas; // set by NPCController
     public float terrainWidth;
     public float terrainLength;
 
@@ -39,10 +39,10 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (myMapIcon != null)
-        {
-            SetMapIcon();
-        }
+        // if (myMapIcon != null)
+        // {
+        //     SetMapIcon();
+        // }
         
         interactionMode = InteractionMode.Querying;
         if (itemsWanted.Count != itemAmountsWanted.Count)
@@ -77,11 +77,11 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         // myMapIcon.transform.position = 
     }
 
-    public void SetMapIcon()
-    {
-        myMapIcon = Instantiate(mapIconPrefab, transform.position, Quaternion.identity, mapCanvas.transform);
-        myMapIcon.transform.position = new Vector3(transform.position.x, transform.position.y, -1100);
-    }
+    // public void SetMapIcon()
+    // {
+    //     myMapIcon = Instantiate(mapIconPrefab, transform.position, Quaternion.identity, mapCanvas.transform);
+    //     myMapIcon.transform.position = new Vector3(transform.position.x, transform.position.y, -1100);
+    // }
 
     public ItemData ChangeMode()
     {
@@ -95,7 +95,7 @@ public class CharacterBehaviorScript1 : MonoBehaviour
         {
             interactionMode = InteractionMode.Happy;
             currText = happyText;
-            return characterSpot.itemData;
+            return null;
         }
         return null;
     }

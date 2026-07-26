@@ -164,7 +164,7 @@ MonoBehaviour:
   input1: 0
   input2: 0
   output: 0
-  gateType: 6
+  gateType: 7
   message: {fileID: 0}
 --- !u!114 &3578861632321072021
 MonoBehaviour:
@@ -191,8 +191,6 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
   myMapIcon: {fileID: 0}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
 --- !u!1 &2638496288133843536

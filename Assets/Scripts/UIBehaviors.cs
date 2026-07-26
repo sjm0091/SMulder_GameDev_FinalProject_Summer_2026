@@ -12,6 +12,9 @@ public class UIBehaviors : MonoBehaviour
 
     public List<GameObject> introMessages = new List<GameObject>();
     public int introMessagesIndex = 0;
+    public AudioSource audioSource;
+    public AudioClip ButtonClickClip;
+    public AudioClip ToggleClickClip;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,6 +29,7 @@ public class UIBehaviors : MonoBehaviour
 
     public void OnClickNextIntroMessage()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         if (introMessagesIndex > introMessages.Count)
         {
             introMessages[introMessagesIndex - 1].SetActive(false);
@@ -41,15 +45,18 @@ public class UIBehaviors : MonoBehaviour
         introMessages[introMessagesIndex].SetActive(true);
 
         introMessagesIndex++;
+
     }
 
     public void OnClickClosePanel(GameObject panel)
     {
+        audioSource.PlayOneShot(ToggleClickClip);
         panel.SetActive(false);
     }
 
     public void OnClickTogglePanel(GameObject panel)
     {
+        audioSource.PlayOneShot(ToggleClickClip);
         panel.SetActive(!panel.activeSelf);
     }
 
@@ -57,11 +64,13 @@ public class UIBehaviors : MonoBehaviour
 
     public void OnClickHelp()
     {
+        audioSource.PlayOneShot(ToggleClickClip);
         helpPanel.SetActive(!helpPanel.activeSelf);
     }
 
     public void OnMenu(InputValue value)
     {
+        audioSource.PlayOneShot(ToggleClickClip);
         if (!value.isPressed)
         {
             return;
@@ -83,6 +92,7 @@ public class UIBehaviors : MonoBehaviour
 
     public void ToggleStoryText()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         storyPanel.SetActive(!storyPanel.activeSelf);
     }
 }

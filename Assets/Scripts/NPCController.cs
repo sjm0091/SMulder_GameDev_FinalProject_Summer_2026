@@ -46,9 +46,9 @@ public class NPCController : MonoBehaviour
                 {
                     found = true;
                     GameObject newChar = Instantiate(character, characterSpots[index]);
-                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().mapCanvas = mapCanvas;
-                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().canvasCamera = canvasCamera;
-                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().SetMapIcon();
+                    // newChar.GetComponentInChildren<CharacterBehaviorScript1>().mapCanvas = mapCanvas;
+                    // newChar.GetComponentInChildren<CharacterBehaviorScript1>().canvasCamera = canvasCamera;
+                    // newChar.GetComponentInChildren<CharacterBehaviorScript1>().SetMapIcon();
                     spawnedCharacters.Add(newChar);
                     newChar.transform.position = new Vector3(newChar.transform.position.x, newChar.transform.position.y + 2f, newChar.transform.position.z);
 
@@ -58,37 +58,37 @@ public class NPCController : MonoBehaviour
         }
     }
 
-    public void AddCharSpotButton(string characterGateName) // called by wire
+    public void AddCharSpotButton(GateType characterGateName) // called by wire
     {
         Debug.Log("Add char spot button triggered");
         int index = -1;
         switch(characterGateName)
         {
-            case "NOR":
+            case GateType.NOR:
             Debug.Log("NOR added");
                 index = 0;
                 break;
-            case "AND":
+            case GateType.AND:
             Debug.Log("AND added");
                 index = 1;
                 break;
-            case "XNOR":
+            case GateType.XNOR:
             Debug.Log("XNOR added");
                 index = 2;
                 break;
-            case "XOR":
+            case GateType.XOR:
             Debug.Log("XOR added");
                 index = 3;
                 break;
-            case "OR":
+            case GateType.OR:
             Debug.Log("OR addedd");
                 index = 4;
                 break;
-            case "NAND":
+            case GateType.NAND:
             Debug.Log("NAND added");
                 index = 5;
                 break;
-            case "NOT":
+            case GateType.NOT:
             Debug.Log("NOT added");
                 index = 6;
                 break;

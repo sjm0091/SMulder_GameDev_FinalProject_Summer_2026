@@ -17,6 +17,8 @@ public class DayNightController : MonoBehaviour
     public NightBehavior nightBehavior;
     public bool finalOutput;
     public JudgementController judgementController;
+    public AudioSource audioSource;
+    public AudioClip ButtonClickClip;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,6 +37,7 @@ public class DayNightController : MonoBehaviour
 
     public void OnClick()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         if (wireScript.finalNode == null)
         {
             return;

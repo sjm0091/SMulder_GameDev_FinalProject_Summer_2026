@@ -31,6 +31,8 @@ public class CircuitNode : MonoBehaviour
     public bool inputsFull;
     public bool outputsFull;
 
+    public bool isNotGate = false;
+
     
     // public TheKing theKing;
 
@@ -220,7 +222,11 @@ public class CircuitNode : MonoBehaviour
         if (thisGate != null)
         {
             thisGate.input1 = inputList[0];
-            thisGate.input2 = inputList[1];
+            if (!isNotGate)
+            {
+                thisGate.input2 = inputList[1];
+            }
+            
         }
         
 

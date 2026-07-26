@@ -5,6 +5,7 @@ using UnityEngine;
 // using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using UnityEditor;
 
 public class NightTimeGameManager : MonoBehaviour
 {
@@ -46,6 +47,10 @@ public class NightTimeGameManager : MonoBehaviour
     // UI
     public TextMeshProUGUI infoText;
     public GameObject kingsMessage;
+
+    // Audio
+    public AudioSource audioSource;
+    public AudioClip ButtonClickClip;
 
 
     // Visits
@@ -214,6 +219,15 @@ public class NightTimeGameManager : MonoBehaviour
     // - Sets input sprites - handles NOT gate
     public void SetUpForNOT(bool notGate)
     {
+        for(int i = 0; i < gridCellsByGate.Count; i++)
+        {
+            gridCellsByGate[i].gameObject.SetActive(true);
+            if (i < outputGridCells.Count)
+            {
+                outputGridCells[i].gameObject.SetActive(true);
+            }
+            
+        }
         Debug.Log("Set up for not triggered");
         Debug.Log("Set up for not: " + notGate);
         if (notGate)
@@ -221,8 +235,10 @@ public class NightTimeGameManager : MonoBehaviour
             Debug.Log("Set up for not: " + notGate);
             for (int i = 0; i < gridCellsByGate.Count; i++)
             {
+                Debug.Log("grid cell " + i);
                 switch (i + 1)
                 {
+                    
                     case 1:
                         gridCellsByGate[i].sprite = noGiftSprite;
                         break;
@@ -231,12 +247,17 @@ public class NightTimeGameManager : MonoBehaviour
                         break;
                     case 3:
                         gridCellsByGate[i].sprite = giftSprite;
+                        outputGridCells[i].gameObject.SetActive(false);
                         break;
                     case 4:
                         gridCellsByGate[i].sprite = giftSprite;
+                        outputGridCells[i].gameObject.SetActive(false);
                         break;
                     default:
+                        Debug.Log("setting cell " + i + " to null and inactive");
+                        Debug.Log("name: " + gridCellsByGate[i].name);
                         gridCellsByGate[i].sprite = null;
+                        gridCellsByGate[i].gameObject.SetActive(false);
                         break;
                 }
             }
@@ -372,17 +393,25 @@ public class NightTimeGameManager : MonoBehaviour
                 GameObject newChar = null;
                 switch (nightsCount)
                 {
-                    case 1:
+                    case 0:
                         Debug.Log("no new character");
                         newChar = null;
                         break;
-                    case 2:
-                        Debug.Log("no new character");
+                    case 1:
+                        Debug.Log("Adding NOT");
                         newChar = characterPrefabs[6];
                         break;
                     default:
                         int ctr = 0;
                         bool chosen = false;
+                        // if (nightsCount == 0)
+                        // {
+                        //     newChar = characterPrefabs[0];
+                        // }
+                        // else if (nightsCount == 1)
+                        // {
+                        //     newChar = characterPrefabs[6];
+                        // }
                         while (!chosen)
                         {
                             if (ctr > 7)
@@ -390,14 +419,7 @@ public class NightTimeGameManager : MonoBehaviour
                                 break;
                             }
                             int index = Random.Range(0, characterPrefabs.Count - 1);
-                            if (nightsCount == 1)
-                            {
-                                index = 0;
-                            }
-                            else if (nightsCount == 2)
-                            {
-                                index = 1;
-                            }
+                            
                             if (!npcController.UnlockedCharacter(characterPrefabs[index]))
                             {
                                 chosen = true;
@@ -466,10 +488,12 @@ public class NightTimeGameManager : MonoBehaviour
     // - Runs through first visit (function)
     public void StartNight()
     {
+        
         if (wireScript.finalNode == null)
         {
             return;
         }
+        audioSource.PlayOneShot(ButtonClickClip);
 
         nightCamera.enabled = true;
         mainCamera.enabled = false;
@@ -535,6 +559,7 @@ public class NightTimeGameManager : MonoBehaviour
     // - disables kings message
     public void OnClickNextVisit()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
 
         foreach (CircuitNode node in circuitNodes)
         {
@@ -562,6 +587,7 @@ public class NightTimeGameManager : MonoBehaviour
     // - starts day (function)
     public void OnClickNextDay()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         ClearCircuit();
         kingPleasedPerVisit = new List<bool>();
         // GenerateMonsters();
@@ -663,5 +689,14 @@ public class NightTimeGameManager : MonoBehaviour
         }
         visitCount = 0;
 
+    }
+
+    public void OnClickClearCircuit()
+    {
+        audioSource.PlayOneShot(ButtonClickClip);
+        ClearCircuit();
+        wireScript.ClearArea();
+        wireScript.numCharNodes = 0;
+        wireScript.wireStart = true;
     }
 }

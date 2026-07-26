@@ -149,6 +149,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DeleteNode",
+                    "type": "Button",
+                    "id": "af5d9a29-a633-404f-9c36-a196a3bb0986",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -567,6 +576,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DeleteWire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7d70a67-fdc1-4af2-92cc-e161e6acf3e7",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DeleteNode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
