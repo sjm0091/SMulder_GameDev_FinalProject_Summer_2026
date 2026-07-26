@@ -60,8 +60,10 @@ public class JudgementController : MonoBehaviour
     public KeyValuePair<bool, string> CheckIfSurvivedNight(List<bool> survivedList)
     {
         bool survived = true;
+        Debug.Log("list of pleasedking");
         foreach (bool pleasedKing in survivedList)
         {
+            Debug.Log("pleasedKing: " + pleasedKing);
             if (!pleasedKing)
             {
                 survived = false;

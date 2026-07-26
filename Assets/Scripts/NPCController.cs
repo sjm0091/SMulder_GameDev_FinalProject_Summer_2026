@@ -18,6 +18,8 @@ public class NPCController : MonoBehaviour
     // UI
     public GameObject wirePanel;
     public List<Button> createCharSpotButtons = new List<Button>();
+    public Canvas mapCanvas;
+    public Camera canvasCamera;
 
     public void Start()
     {
@@ -44,6 +46,9 @@ public class NPCController : MonoBehaviour
                 {
                     found = true;
                     GameObject newChar = Instantiate(character, characterSpots[index]);
+                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().mapCanvas = mapCanvas;
+                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().canvasCamera = canvasCamera;
+                    newChar.GetComponentInChildren<CharacterBehaviorScript1>().SetMapIcon();
                     spawnedCharacters.Add(newChar);
                     newChar.transform.position = new Vector3(newChar.transform.position.x, newChar.transform.position.y + 2f, newChar.transform.position.z);
 

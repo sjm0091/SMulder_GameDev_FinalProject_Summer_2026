@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
+using Unity.Hierarchy;
 using UnityEngine;
 
 public enum InteractionMode
@@ -26,10 +27,23 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     public InteractionMode interactionMode;
     public string currText;
 
+    public GameObject mapIconPrefab;
+    public GameObject myMapIcon;
+    public Camera canvasCamera; // set by NPCController
+    public Canvas mapCanvas; // set by NPCController
+    public float terrainWidth;
+    public float terrainLength;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (myMapIcon != null)
+        {
+            SetMapIcon();
+        }
+        
         interactionMode = InteractionMode.Querying;
         if (itemsWanted.Count != itemAmountsWanted.Count)
         {
@@ -43,6 +57,30 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void LateUpdate()
+    {
+        if (myMapIcon == null)
+        {
+            return;
+        }
+        float xPercent = transform.position.x / terrainWidth;
+        float yPercent = transform.position.x / terrainWidth;
+
+        float xPos = xPercent * 256f;
+        float yPos = yPercent * 256f;
+
+
+        // myMapIcon.GetComponent<RectTransform>().SetPositionAndRotation(new Vector3(xPos, yPos, myMapIcon.GetComponent<RectTransform>().localPosition.y), Quaternion.identity);
+        // Debug.Log("anchored position: " + myMapIcon.GetComponent<RectTransform>().anchoredPosition);
+        // myMapIcon.transform.position = 
+    }
+
+    public void SetMapIcon()
+    {
+        myMapIcon = Instantiate(mapIconPrefab, transform.position, Quaternion.identity, mapCanvas.transform);
+        myMapIcon.transform.position = new Vector3(transform.position.x, transform.position.y, -1100);
     }
 
     public ItemData ChangeMode()

@@ -123,6 +123,54 @@ public class WirePlaceMode : MonoBehaviour
         
     }
 
+    public bool DeleteWirePart(GameObject wirePart)
+    {
+        Debug.Log("Delete Wire Triggered");
+        List<Transform> toDestroy = new List<Transform>();
+        foreach (Transform key in wireDict.Keys)
+        {
+            bool isWireEnd = false;
+            GameObject start = wirePart;
+            if (wirePart == key)
+            {
+                isWireEnd = true;
+                toDestroy.Add(wirePart.transform);
+                toDestroy.Add(wireEndPairs[wirePart].transform);
+            }
+            if (wireEndPairs.Keys.Contains(key.gameObject) && wireEndPairs[key.gameObject] == wirePart)
+            {
+                start = key.gameObject;
+                isWireEnd = true;
+                toDestroy.Add(start.transform);
+                toDestroy.Add(wireEndPairs[start].transform);
+            }
+            foreach (Transform part in wireDict[key])
+            {
+                if (isWireEnd)
+                {
+                    toDestroy.Add(part);
+                }
+            }
+            
+        }
+        if (toDestroy.Count <= 0)
+        {
+            Debug.Log("toDestroy is empty");
+            return false;
+            
+        }
+        for (int i = 0; i < toDestroy.Count; i++)
+        {
+            if (wireDict.Keys.Contains(toDestroy[i])) // wire start
+            {
+                wireDict.Remove(toDestroy[i]);
+                wireEndPairs.Remove(toDestroy[i].gameObject);
+            }
+            Destroy(toDestroy[i].gameObject);
+        }
+        return true;
+    }
+
     public bool PlaceWireEnd(Vector3 pos, CircuitNode node)
     {
         Debug.Log("Place Wire End Triggered");
@@ -135,14 +183,14 @@ public class WirePlaceMode : MonoBehaviour
         if (wireStart && node.outputsFull)
         {
             Debug.Log("Outputs full");
-            SetFailText("Ouputs full");
+            StartCoroutine(SetFailText("Ouputs full"));
             return false;
         }
 
         if (!wireStart && node.inputsFull)
         {
             Debug.Log("Inputs full");
-            SetFailText("Inputs full");
+            StartCoroutine(SetFailText("Inputs full"));
             return false;
         }
 
@@ -150,14 +198,14 @@ public class WirePlaceMode : MonoBehaviour
         if (wireStart && node.outputSites.Count <= 0)
         {
             Debug.Log("Not first if");
-            SetFailText("Ouputs full");
+            StartCoroutine(SetFailText("Ouputs full"));
             return false;
         }
 
         if (!wireStart && (node.inputs.Count >= node.inputMax || node.inputSites.Count <= 0))
         {
             Debug.Log("Not second if");
-            SetFailText("Inputs full");
+            StartCoroutine(SetFailText("Inputs full"));
             return false;
         }
 
@@ -204,6 +252,7 @@ public class WirePlaceMode : MonoBehaviour
 
         GameObject thisWire = Instantiate(wireEndPrefab, pos, Quaternion.identity, parent.transform);
         thisWire.transform.position = parent.transform.position + outputSiteOffset;
+        node.wireEndsList.Add(thisWire);
 
         thisWire.transform.SetParent(node.gameObject.transform);
         parent.SetActive(false);
@@ -397,19 +446,33 @@ public class WirePlaceMode : MonoBehaviour
 
     public IEnumerator SetFailText(string text)
     {
+        Debug.Log("Set fail text triggered");
         failText.text = text;
+        failTextPanel.SetActive(true);
+        Image failImg = failTextPanel.GetComponent<Image>();
+        failImg.color = new Color(failImg.color.r, failImg.color.b, failImg.color.g, 1);
         failText.gameObject.SetActive(true);
+        
         
         yield return new WaitForSeconds(failTextTime);
 
         float fullAlpha = 1;
+        
+        // Image failPanelImg = failTextPanel.GetComponent<Image>();
+        
+        // failPanelImg.color = new Color(failPanelImg.color.r, failPanelImg.color.b, failPanelImg.color.g, 1);
         while (fullAlpha > 0)
         {
-            Image failImg = failTextPanel.GetComponent<Image>();
-            failImg.color = new Color(failImg.color.r, failImg.color.b, failImg.color.g, fullAlpha--);
+            
+            fullAlpha -= 0.1f;
+            failImg.color = new Color(failImg.color.r, failImg.color.b, failImg.color.g, fullAlpha);
+            // failPanelImg.color = new Color(failPanelImg.color.r, failPanelImg.color.b, failPanelImg.color.g, fullAlpha);
+            yield return new WaitForSeconds(0.05f);
+            
         }
 
         failText.gameObject.SetActive(false);
+        failTextPanel.SetActive(false);
         failText.text = "";
     }
 

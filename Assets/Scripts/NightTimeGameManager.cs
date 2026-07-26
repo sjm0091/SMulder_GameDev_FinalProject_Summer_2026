@@ -365,7 +365,7 @@ public class NightTimeGameManager : MonoBehaviour
             bool survived = response.Key;
             if (!survived)
             {
-                visitCount--; // try day again
+                nightsCount--; // try day again
             }
             else
             {
@@ -390,6 +390,14 @@ public class NightTimeGameManager : MonoBehaviour
                                 break;
                             }
                             int index = Random.Range(0, characterPrefabs.Count - 1);
+                            if (nightsCount == 1)
+                            {
+                                index = 0;
+                            }
+                            else if (nightsCount == 2)
+                            {
+                                index = 1;
+                            }
                             if (!npcController.UnlockedCharacter(characterPrefabs[index]))
                             {
                                 chosen = true;
@@ -555,6 +563,7 @@ public class NightTimeGameManager : MonoBehaviour
     public void OnClickNextDay()
     {
         ClearCircuit();
+        kingPleasedPerVisit = new List<bool>();
         // GenerateMonsters();
         kingsMessage.SetActive(false);
         endOfDayPanel.SetActive(false);

@@ -140,6 +140,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "DeleteWire",
+                    "type": "Button",
+                    "id": "7dd41294-0634-4dcf-aab3-3806c19568ea",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -549,6 +558,17 @@
                     "action": "SetWireEnd",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "737d69fa-5a41-4230-ac00-0333022cf5b3",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DeleteWire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

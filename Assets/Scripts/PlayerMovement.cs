@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed = 10f;
     public float jumpForce = 1f;
     public float rotationSpeed = 0.5f;
+    public Animator animator;
 
     float gravity = -9.8f;
 
@@ -27,12 +28,31 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
         // rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        // if (moveInput.x == 0 && moveInput.y == 0 && animator)
+        // {
+        //     animator.SetTrigger("Run", false);
+        // }
+
+        // if ((moveInput.x != 0 || moveInput.y != 0))
+        // {
+        //     if (animator != null)
+        //     {
+        //         animator.SetTrigger("Run");
+        //     }
+        // }
+
+        if (moveInput.x == 0 && moveInput.y == 0 && moveSpeed >= 0f)
+        {
+            animator.SetFloat("moveSpeed", 0f);
+        }
+
         Vector3 rotation = new Vector3(0f, (rotateInput.x + rotateInput.y) / 2, 0f).normalized;
         transform.rotation = Quaternion.Euler(transform.eulerAngles + (rotation * rotationSpeed));
         rb.freezeRotation = false;
@@ -43,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
         if (jumpCrouchInput.x != 0)
         {
             currSpeed = sprintSpeed;
+            if (animator.GetFloat("moveSpeed") == 5f)
+            {
+                animator.SetFloat("moveSpeed", 10f);
+            }
+            
         }
 
 
@@ -64,6 +89,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        if (!isGrounded && Physics.Raycast(raycastStart.position, Vector3.down, 4f))
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("Land");
+            }
+        }
+
         
 
         
@@ -72,6 +105,12 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+
+        if (animator != null)
+        {
+            animator.SetFloat("moveSpeed", 5f);
+            animator.SetTrigger("Run");
+        }
         // Debug.Log(moveInput);
     }
 
@@ -83,10 +122,26 @@ public class PlayerMovement : MonoBehaviour
     public void OnJumpCrouch(InputValue value)
     {
         jumpCrouchInput = value.Get<Vector2>();
+
+        if (jumpCrouchInput.x != 0)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("Sprint");
+            }
+        }
+        if (jumpCrouchInput.y != 0)
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("Jump");
+            }
+        }
     }
 
     public void CheckIfGrounded()
     {
+        
         if (Physics.Raycast(transform.position, Vector3.down, 1.5f))
         {
             isGrounded = true;

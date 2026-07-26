@@ -19,11 +19,17 @@ public class InteractableObject : MonoBehaviour
     public Sprite itemIcon;
     public int maxStackAmount = 5;
     public Inventory inventory;
+    public GameObject mapIconPrefab;
+    public GameObject myMapIcon;
+    public Canvas mapCanvas;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // myMapIcon = Instantiate(mapIconPrefab, transform.position, Quaternion.identity, mapCanvas.transform);
+        // myMapIcon.transform.position = new Vector3(transform.position.x, transform.position.y, -1100);
         // resource
         resourceCounter = FindFirstObjectByType<ResourceCounter>();
+
         // PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
         // player = playerMovement.gameObject.transform;
     }
@@ -43,6 +49,10 @@ public class InteractableObject : MonoBehaviour
         //     promptText.text = "I have "+ numWants +" " +wants + "! Now I will do as you ask";
         // }
 
+    }
+    void LateUpdate()
+    {
+        // myMapIcon.transform.position = new Vector3(transform.position.x, transform.position.y, -1100);
     }
 
     public void Interact(Inventory inventory) //TODO change to input system

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ public class PlayerInteractionScript : MonoBehaviour
     private float minDistance = 5f;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
+    public GameObject promptTextPanel;
     public string currentCharMessage = "Talk [E]";
     public bool talking;
     public InteractableObject currentItem;
@@ -37,6 +39,7 @@ public class PlayerInteractionScript : MonoBehaviour
     private bool isCharInteracting = false;
     private bool noStart = true;
     private bool noEnd = true;
+    public List<GameObject> wireEnds = new List<GameObject>();
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -217,6 +220,7 @@ public class PlayerInteractionScript : MonoBehaviour
             promptText.text = "Press V To Interact";
             
             promptText.gameObject.SetActive(true);
+            promptTextPanel.SetActive(true);
             // Debug.Log(promptText.text);
 
         } 
@@ -229,6 +233,7 @@ public class PlayerInteractionScript : MonoBehaviour
             if (!talking) {
                 promptText.text = currentChar.promptText;
                 promptText.gameObject.SetActive(true);
+                promptTextPanel.SetActive(true);
             } else
             {
                 promptText.text = currentCharMessage;
@@ -239,6 +244,7 @@ public class PlayerInteractionScript : MonoBehaviour
         else if (currentChar == null && currentItem == null && !isCharInteracting)
         {
             promptText.gameObject.SetActive(false);
+            promptTextPanel.SetActive(false);
             talking = false;
             // Debug.Log("curr char is null & curr item is null: setting prompt text false");
         }
@@ -322,6 +328,42 @@ public class PlayerInteractionScript : MonoBehaviour
         
         // messageText = "" TODO: implement random wants message
 
+    }
+
+    public void OnDeleteWire(InputValue value)
+    {
+        Debug.Log("OnDeleteWire");
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        if (currentNode == null)
+        {
+            Debug.Log("No wire selected");
+            return;
+        }
+
+        float smallestDistance = Mathf.Infinity;
+        GameObject closestWireEnd = null;
+        foreach(GameObject wireEnd in currentNode.wireEndsList)
+        {
+            if (Vector3.Distance(transform.position, wireEnd.transform.position) < smallestDistance)
+            {
+                smallestDistance = Vector3.Distance(transform.position, wireEnd.transform.position);
+                closestWireEnd = wireEnd;
+            }
+        }
+
+        if (!closestWireEnd)
+        {
+            Debug.Log("No wire on this node");
+            return;
+        }
+
+        bool deleteComplete = gameManager.DeleteWirePart(closestWireEnd);
+
+        Debug.Log("deletecomplete: " + deleteComplete);
     }
 
     public void OnWire(InputValue value)
@@ -415,6 +457,7 @@ public class PlayerInteractionScript : MonoBehaviour
         if (finished)
         {
             Debug.Log("wire end placed");
+            
         } else
         {
             Debug.Log("failed to place wire end");
@@ -538,6 +581,7 @@ public class PlayerInteractionScript : MonoBehaviour
         if (promptText != null)
         {
             promptText.gameObject.SetActive(false);
+            promptTextPanel.SetActive(false);
             // Debug.Log("item interact routine set active false");
         }
 

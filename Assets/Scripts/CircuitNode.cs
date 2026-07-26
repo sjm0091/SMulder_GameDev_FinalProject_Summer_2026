@@ -18,6 +18,7 @@ public class CircuitNode : MonoBehaviour
     public List<GameObject> outputSites = new List<GameObject>();
     public List<GameObject> inputSites = new List<GameObject>();
     public List<CircuitNode> outputs = new List<CircuitNode>();
+    public List<GameObject> wireEndsList = new List<GameObject>();
     public bool hasInputLimit = true;
     public int inputMax = 2;
     public int maxOutputs = 5;
