@@ -1,5 +1,7 @@
 Title: Logically Pleasant Times
 
+NOTE FOR REPOSITORY: Final Project is in the main branch
+
 Concept:
 Goal is to please the king. There are villagers scattered about that act like logic gates when placed in a circuit. You collect flowers for them and gain their approval and then arrange their spots in a circuit in front of the gates. A monster will come and eat some of the gifts that have been left. Gifts act as logical True and lack of gifts act as logical False.
 You must organize them (like logic gates) so that the King gets what he wants. The king will ask for something at different times "visits" during the night. Sometimes he wants a gift, and sometimes he doesn't. Your circuit must match his request for each visit.
