@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip ButtonClickClip;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,12 +19,15 @@ public class MainMenuController : MonoBehaviour
 
     public void OnClickStart()
     {
+        audioSource.PlayOneShot(ButtonClickClip);
         SceneManager.LoadScene("MainScene");
     }
 
     public void OnClickQuit()
     {
         Debug.Log("Quit");
+         audioSource.PlayOneShot(ButtonClickClip);
         Application.Quit();
+       
     }
 }

@@ -32,6 +32,7 @@ public class GateBehaviorScript : MonoBehaviour
 
     public bool PerformGateBehavior()
     {
+        Debug.Log("Perform Gate Behavior called: " + gateType);
         bool newOutput = false;
         switch (gateType)
         {
@@ -63,6 +64,7 @@ public class GateBehaviorScript : MonoBehaviour
 
     public bool CallAND(bool firstInput, bool secondInput)
     {
+        Debug.Log("AND: " + (firstInput && secondInput));
         return firstInput && secondInput;
     }
 
@@ -76,27 +78,32 @@ public class GateBehaviorScript : MonoBehaviour
 
     public bool CallNOR(bool firstInput, bool secondInput)
     {
+        Debug.Log("NOR: " + !(firstInput || secondInput));
         return !(firstInput || secondInput);
     }
 
     public bool CallNOT(bool newInput)
     {
+        Debug.Log("NOT: " + !newInput);
         return !newInput;
     }
 
     public bool CallOR(bool firstInput, bool secondInput)
     {
+        Debug.Log("OR: " + (firstInput || secondInput));
         return firstInput || secondInput;
     }
 
     public bool CallXNOR(bool firstInput, bool secondInput)
     {
+        Debug.Log("XNOR: " + (!((firstInput || secondInput) && !(firstInput && secondInput))));
         return !((firstInput || secondInput) && !(firstInput && secondInput));
     }
 
     public bool CallXOR(bool firstInput, bool secondInput)
     {
         // optimize
+        Debug.Log("XOR: " + ((firstInput || secondInput) && !(firstInput && secondInput)));
         return (firstInput || secondInput) && !(firstInput && secondInput);
     }
 }

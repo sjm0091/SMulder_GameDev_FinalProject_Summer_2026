@@ -62,6 +62,7 @@ public class TheKing : MonoBehaviour
 
     public void OnClickNextDay()
     {
+        dayNightController.ClearCircuit();
         nightBehavior.GenerateMonsters();
         kingsMessage.SetActive(false);
         wireScript.ClearArea();

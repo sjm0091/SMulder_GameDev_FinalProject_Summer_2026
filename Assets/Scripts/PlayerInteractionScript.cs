@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,18 @@ using UnityEngine.InputSystem;
 public class PlayerInteractionScript : MonoBehaviour
 {
     public GateBehaviorScript character;
+    public NPCController npcController;
+    public NightTimeGameManager nightTimeGameManager;
     private float minDistance = 5f;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
+    public GameObject promptTextPanel;
+
+    public TextMeshProUGUI introduceText;
+    public GameObject introduceTextPanel;
+
     public string currentCharMessage = "Talk [E]";
+    public string currentIntroduceText = "";
     public bool talking;
     public InteractableObject currentItem;
 
@@ -24,6 +33,7 @@ public class PlayerInteractionScript : MonoBehaviour
     public Inventory inventory;
     public WirePlaceMode gameManager;
     public TextMeshProUGUI nodeSelectedText;
+    public GameObject nodeSelectedTextPanel;
 
     //wire placement
     private Vector3 start;
@@ -34,6 +44,17 @@ public class PlayerInteractionScript : MonoBehaviour
     private bool isInteracting = false;
     private bool charInteraction = false;
     private bool isCharInteracting = false;
+    private bool noStart = true;
+    private bool noEnd = true;
+    public List<GameObject> wireEnds = new List<GameObject>();
+
+    //audio
+    public AudioSource audioSource;
+    public AudioClip PlaceClip;
+    public AudioClip InventoryClip;
+    public AudioClip CollectClip;
+    public AudioClip TalkClip;
+    public AudioClip GiveClip;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -82,7 +103,7 @@ public class PlayerInteractionScript : MonoBehaviour
         foreach(Collider hit in hits)
         {
             // Debug.Log("Hit: " + hit.gameObject.name);
-            Debug.Log("Hit: " + hit.gameObject.name);
+            // Debug.Log("Hit: " + hit.gameObject.name);
             CircuitNode nodeFound;
 
             nodeFound = null;
@@ -104,18 +125,21 @@ public class PlayerInteractionScript : MonoBehaviour
             
         }
         currentNode = closestNode;
-        Debug.Log(closestNode);
-        Debug.Log(currentNode);
+        // Debug.Log(closestNode);
+        // Debug.Log(currentNode);
 
         if (currentNode != null) {
-            Debug.Log("closest node not null");
+            // Debug.Log("closest node not null");
+            nodeSelectedTextPanel.SetActive(true);
             nodeSelectedText.gameObject.SetActive(true);
             nodeSelectedText.text = "Node Selected: " + currentNode.nodeName;
         } else
         {
-            Debug.Log("closest node is NULL");
+            // Debug.Log("closest node is NULL");
+            nodeSelectedTextPanel.SetActive(false);
             nodeSelectedText.gameObject.SetActive(false);
         }
+
     }
 
     public void FindNearbyItem(bool character = false)
@@ -211,8 +235,8 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             // Debug.Log("current Item");
             promptText.text = "Press V To Interact";
-            
             promptText.gameObject.SetActive(true);
+            promptTextPanel.SetActive(true);
             // Debug.Log(promptText.text);
 
         } 
@@ -223,11 +247,17 @@ public class PlayerInteractionScript : MonoBehaviour
             // if (promptText.text != currentChar.promptText && promptText.text != currentChar.happyText && promptText.text != currentChar.waitingText && promptText.text != currentChar.queryingText)
             // {
             if (!talking) {
+                introduceText.text = "";
+                introduceText.gameObject.SetActive(true);
+                introduceTextPanel.SetActive(true);
+
                 promptText.text = currentChar.promptText;
                 promptText.gameObject.SetActive(true);
+                promptTextPanel.SetActive(true);
             } else
             {
                 promptText.text = currentCharMessage;
+                introduceText.text = currentIntroduceText;
             }
             
             
@@ -235,6 +265,9 @@ public class PlayerInteractionScript : MonoBehaviour
         else if (currentChar == null && currentItem == null && !isCharInteracting)
         {
             promptText.gameObject.SetActive(false);
+            promptTextPanel.SetActive(false);
+            introduceText.gameObject.SetActive(false);
+            introduceTextPanel.SetActive(false);
             talking = false;
             // Debug.Log("curr char is null & curr item is null: setting prompt text false");
         }
@@ -258,16 +291,17 @@ public class PlayerInteractionScript : MonoBehaviour
             // }
             GateBehaviorScript script = hit.GetComponent<GateBehaviorScript>();
 
-            Debug.Log("hit: " + hit);
+            // Debug.Log("hit: " + hit);
 
             if (script == null)
             {
-                Debug.Log("tag not correct");
+                // Debug.Log("tag not correct");
                 break;
             }
-            Debug.Log("hit: " + hit);
+            // Debug.Log("hit: " + hit);
 
             messageText = script.message;
+            
 
             GameObject hitChar = hit.gameObject;
             float distance = Vector3.Distance(transform.position, hitChar.transform.position);
@@ -283,7 +317,7 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        Debug.Log("On Interact triggered");
+        // Debug.Log("On Interact triggered");
 
         if (!value.isPressed)
         {
@@ -297,27 +331,101 @@ public class PlayerInteractionScript : MonoBehaviour
             return;
         }
 
+        if (currentItem != null && currentItem.GetComponent<GateBehaviorScript>() != null)
+        {
+            return;
+        }
+        
+
         
         
 
         if(charInteraction)
         {
-            Debug.Log("char interaction routine");
+            audioSource.PlayOneShot(TalkClip);
+            // Debug.Log("char interaction routine");
             charInteraction = false;
+
             StartCoroutine(CharInteractRoutine());
         } else
         {
+            audioSource.PlayOneShot(CollectClip);
             StartCoroutine(ItemInteractRoutine());
         }
 
         
 
-        Debug.Log("interact triggered with item");
+        // Debug.Log("interact triggered with item");
         
 
         
         // messageText = "" TODO: implement random wants message
 
+    }
+
+    // public void OnDeleteNode(InputValue value)
+    // {
+    //     Debug.Log("OnDeleteNode");
+    //     if (!value.isPressed)
+    //     {
+    //         return;
+    //     }
+
+    //     if (currentNode == null)
+    //     {
+    //         Debug.Log("No wire selected");
+    //         return;
+    //     }
+
+    //     List<GameObject> toDestroy = new List<GameObject>();
+    //     foreach(GameObject wire in currentNode.wireEndsList)
+    //     {
+    //         toDestroy.Add(wire);
+    //     }
+    //     for (int i = 0; i < toDestroy.Count; i++)
+    //     {
+    //         Destroy(toDestroy[i]);
+    //     }
+
+    //     nightTimeGameManager.circuitNodes.Remove(currentNode);
+    //     Destroy(currentNode.gameObject);
+    // }
+
+    public void OnDeleteWire(InputValue value)
+    {
+        Debug.Log("OnDeleteWire");
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        if (currentNode == null)
+        {
+            Debug.Log("No wire selected");
+            return;
+        }
+
+        float smallestDistance = Mathf.Infinity;
+        GameObject closestWireEnd = null;
+        foreach(GameObject wireEnd in currentNode.wireEndsList)
+        {
+            if (Vector3.Distance(transform.position, wireEnd.transform.position) < smallestDistance)
+            {
+                smallestDistance = Vector3.Distance(transform.position, wireEnd.transform.position);
+                closestWireEnd = wireEnd;
+            }
+        }
+
+        if (!closestWireEnd)
+        {
+            Debug.Log("No wire on this node");
+            return;
+        }
+        audioSource.PlayOneShot(PlaceClip);
+
+        bool deleteComplete = gameManager.DeleteWirePart(closestWireEnd);
+
+        Debug.Log("deletecomplete: " + deleteComplete);
     }
 
     public void OnWire(InputValue value)
@@ -326,17 +434,35 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             return;
         }
+
+        if (noStart)
+        {
+            Debug.Log("noStart");
+            return;
+        }
+
+        if (noEnd)
+        {
+            Debug.Log("noEnd");
+            return;
+        }
         
         if (end != null && start != null)
         {
+            audioSource.PlayOneShot(PlaceClip);
+            Debug.Log("wire placed");
             gameManager.PlaceWire(start, end);
+            noStart = true;
         }
+
+        
 
         
     }
 
     public void OnWireEnd(InputValue value)
     {
+        Debug.Log("On Wire End");
         if (!value.isPressed)
         {
             return;
@@ -348,17 +474,67 @@ public class PlayerInteractionScript : MonoBehaviour
 
         Vector3 position = currentNode.wireConnection.position;
         
-
+        // bool foundOpen = false;
         if (placeStart)
         {
-            start = position;
+            
+            for (int i = 0; i < currentNode.outputSites.Count; i++)
+            {
+                if (i == currentNode.outputs.Count)
+                {
+                    start = currentNode.outputSites[i].transform.position;
+                    // foundOpen = true;
+                }
+            }
+            noStart = false;
+            noEnd = true;
         }
         else
         {
-            end = position;
+            for (int i = 0; i < currentNode.inputSites.Count; i++)
+            {
+                if (i == currentNode.inputs.Count)
+                {
+                    end = currentNode.inputSites[i].transform.position;
+                    // foundOpen = true;
+                }
+            }
+            noEnd = false;
         }
 
-        gameManager.PlaceWireEnd(position, currentNode);
+        // if (!foundOpen)
+        // {
+        //     return;
+        // }
+
+        // if (placeStart)
+        // {
+        //     noStart = false;
+        //     noEnd = true;
+        // } else
+        // {
+        //     noEnd = false;
+        // }
+        audioSource.PlayOneShot(PlaceClip);
+        bool finished = gameManager.PlaceWireEnd(position, currentNode);
+        if (finished)
+        {
+            Debug.Log("wire end placed");
+            
+        } else
+        {
+            Debug.Log("failed to place wire end");
+            if (placeStart)
+            {
+                noStart = true;
+                noEnd = false;
+            } else
+            {
+                noEnd = true;
+            }
+            return;
+        }
+        
 
 
         placeStart = !placeStart;
@@ -370,6 +546,7 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             return;
         }
+        audioSource.PlayOneShot(PlaceClip);
 
         Vector3 position = transform.position;
         position = transform.position + (transform.forward * placementOffset);
@@ -379,7 +556,8 @@ public class PlayerInteractionScript : MonoBehaviour
 
     public void OnGive(InputValue value)
     {
-        Debug.Log("Give triggered");
+        audioSource.PlayOneShot(GiveClip);
+        // Debug.Log("Give triggered");
         if (!value.isPressed)
         {
             // Debug.Log("value was not pressed");
@@ -414,20 +592,20 @@ public class PlayerInteractionScript : MonoBehaviour
         for(int i = 0; i < itemList.Count; i++)
         {
             toSend[i] = itemList[i];
-            Debug.Log("item added: " + toSend[i]);
+            // Debug.Log("item added: " + toSend[i]);
         }
 
         foreach(ItemData item in toSend)
         {
-            Debug.Log("item in toSend: " + item);
+            // Debug.Log("item in toSend: " + item);
         }
 
-        Debug.Log("toSend: " + toSend);
+        // Debug.Log("toSend: " + toSend);
         bool isGiven = currentChar.GiveGift(toSend, promptText);
         if (isGiven)
         {
             currentCharMessage = currentChar.currText;
-            Debug.Log("items wanted: " + currentChar.itemsWanted.Count);
+            // Debug.Log("items wanted: " + currentChar.itemsWanted.Count);
             for (int i = 0; i < currentChar.itemsWanted.Count; i++)
             {
                 for (int j = 0; j < currentChar.itemAmountsWanted[i]; j++)
@@ -437,7 +615,65 @@ public class PlayerInteractionScript : MonoBehaviour
                 
             }
             inventory.AddItem(currentChar.characterSpot, 1, currentChar.charSpotPrefab);
+            // npcController.AddCharacter(currentChar.charSpotPrefab);
+            npcController.AddCharSpotButton(currentChar.gameObject.GetComponent<GateBehaviorScript>().gateType);
         }
+    }
+
+    public void OnIntroduce(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        // Debug.Log("On Interact triggered");
+
+        if (!value.isPressed)
+        {
+            // Debug.Log("value was not pressed");
+            return;
+        }
+
+        if ((currentChar == null && currentItem == null) || isInteracting)
+        {
+            // Debug.Log("current item is null or isInteracting");
+            return;
+        }
+
+        if (currentItem != null && currentItem.GetComponent<GateBehaviorScript>() != null)
+        {
+            return;
+        }
+        Debug.Log("Introduce");
+        
+
+        
+        
+
+        
+        audioSource.PlayOneShot(TalkClip);
+        // Debug.Log("char interaction routine");
+        // charInteraction = false;
+
+        StartCoroutine(IntroduceRoutine());
+        
+
+        
+
+
+    }
+
+    private IEnumerator IntroduceRoutine()
+    {
+        // talking = true;
+        // currentItem = null;
+        // currentIntroduceText = currentChar.currText;
+        currentChar.Introduce(introduceText);
+        currentIntroduceText = currentChar.introductionText;
+        // currentChar = null;
+
+        yield return null;
     }
 
     private IEnumerator CharInteractRoutine()
@@ -446,7 +682,7 @@ public class PlayerInteractionScript : MonoBehaviour
         isCharInteracting = true;
         if (promptText != null)
         {
-            Debug.Log("prompt text is not null");
+            // Debug.Log("prompt text is not null");
             // promptText.gameObject.SetActive(false);
         }
         currentItem = null;
@@ -460,18 +696,20 @@ public class PlayerInteractionScript : MonoBehaviour
 
     private IEnumerator ItemInteractRoutine()
     {
-        Debug.Log("Interact routine started");
+        // Debug.Log("Interact routine started");
         isInteracting = true;
 
         if (promptText != null)
         {
             promptText.gameObject.SetActive(false);
-            Debug.Log("item interact routine set active false");
+            promptTextPanel.SetActive(false);
+            // Debug.Log("item interact routine set active false");
         }
+        
 
     
         currentChar = null;
-        Debug.Log("currentItem = " + currentItem.name);
+        // Debug.Log("currentItem = " + currentItem.name);
         currentItem.Interact(inventory);
         currentItem = null;
         
@@ -483,9 +721,82 @@ public class PlayerInteractionScript : MonoBehaviour
         
     }
 
+    // public void OnSetWireEnd(InputValue value)
+    // {
+    //     Vector2 vectorValue = value.Get<Vector2>();
+    //     if (vectorValue.x == 0 && vectorValue.y == 0)
+    //     {
+    //         return;
+    //     }
+        
+    //     Debug.Log("on set wire end triggered");
+    //     // if (!value.isPressed)
+    //     // {
+    //     //     return;
+    //     // }
+
+    //     // for (int i = 0; i < currentNode.wireOutputs; i++ )
+    //     // {
+    //     //     if (currentNode.wireOutputs < currentNode.maxOutputs)
+    //     //     {
+                
+    //     //     }
+    //     // }
+
+    //     Vector3 position = currentNode.wireConnection.position;
+        
+
+    //     // if (placeStart)
+    //     // {
+    //     //     start = position;
+    //     // }
+    //     // else
+    //     // {
+    //     //     end = position;
+    //     // }
+
+    //     // gameManager.PlaceWireEnd(position, currentNode);
+
+        
+
+    //     Debug.Log(vectorValue);
+    //     bool isWireStart;
+    //     if (vectorValue.y > 0 && placeStart)
+    //     {
+    //         isWireStart = true;
+    //         Debug.Log("set start");
+    //     }
+    //     else if (vectorValue.y < 0 && !placeStart)
+    //     {
+    //         Debug.Log("set end");
+    //         isWireStart = false;
+    //     }
+    //     else
+    //     {
+    //         return;
+    //     }
+
+    //     if (isWireStart) // wire start 
+    //     {
+    //         gameManager.PlaceWireEnd(position, currentNode, true);
+    //     } 
+    //     else if (!isWireStart) // wire end
+    //     {
+    //         gameManager.PlaceWireEnd(position, currentNode, false);
+    //     }
+
+    //     isWireStart = !isWireStart;
+    // }
+
     public void OnSetFinal(InputValue value)
     {
+        audioSource.PlayOneShot(GiveClip);
         if (!value.isPressed)
+        {
+            return;
+        }
+
+        if (currentNode == null)
         {
             return;
         }

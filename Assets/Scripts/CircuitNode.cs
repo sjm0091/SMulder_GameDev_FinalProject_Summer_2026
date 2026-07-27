@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 public class CircuitNode : MonoBehaviour
 {
+    // public JudgementController judgementController;
     public string nodeName;
     
     public List<bool> inputList = new List<bool>();
@@ -13,31 +15,62 @@ public class CircuitNode : MonoBehaviour
 
     public Transform wireConnection;
     public List<CircuitNode> inputs = new List<CircuitNode>();
+    public List<GameObject> outputSites = new List<GameObject>();
+    public List<GameObject> inputSites = new List<GameObject>();
     public List<CircuitNode> outputs = new List<CircuitNode>();
+    public List<GameObject> wireEndsList = new List<GameObject>();
     public bool hasInputLimit = true;
     public int inputMax = 2;
+    public int maxOutputs = 5;
     public bool hasOutputLimit = false;
     public int outputMax = 2;
     private GateBehaviorScript thisGate;
-    public DayNightController gameManager;
+    // public DayNightController dayNightController;
     private bool nightOn = false;
     public bool actionsCompleted = false;
-    public TheKing theKing;
+    public bool inputsFull;
+    public bool outputsFull;
+
+    public bool isNotGate = false;
+
+    
+    // public TheKing theKing;
+
+    public NightTimeGameManager nightTimeGameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         thisGate = GetComponent<GateBehaviorScript>();
-        gameManager = FindFirstObjectByType<DayNightController>();
-        theKing = FindAnyObjectByType<TheKing>();
+        nightTimeGameManager = FindFirstObjectByType<NightTimeGameManager>();
+        // dayNightController = FindFirstObjectByType<DayNightController>();
+        // theKing = FindAnyObjectByType<TheKing>();
+        // judgementController = FindFirstObjectByType<JudgementController>();
+
+        // dayNightController.circuitNodes.Add(this);
+        nightTimeGameManager.circuitNodes.Add(this);
+
+        foreach (GameObject site in outputSites)
+        {
+            site.SetActive(true);
+        }
+
+        foreach (GameObject site in inputSites)
+        {
+            site.SetActive(true);
+        }
+
+        inputsFull = false;
+        outputsFull = false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!gameManager.isDay && !nightOn)
-        {
-            StartNight();
-        }
+        // if (!dayNightController.isDay && !nightOn)
+        // {
+        //     StartNight();
+        // }
     }
 
     public bool AddInput(CircuitNode node)
@@ -52,6 +85,11 @@ public class CircuitNode : MonoBehaviour
         }
 
         inputs.Add(node);
+
+        if (inputs.Count == inputSites.Count)
+        {
+            inputsFull = true;
+        }
         return true;
     }
 
@@ -95,6 +133,11 @@ public class CircuitNode : MonoBehaviour
         }
 
         outputs.Add(node);
+
+        if (outputs.Count == outputSites.Count)
+        {
+            outputsFull = true;
+        }
         return true;
     }
 
@@ -111,6 +154,38 @@ public class CircuitNode : MonoBehaviour
         return true;
     }
 
+    public void ClearNode()
+    {
+        outputs.Clear();
+        inputs.Clear();
+        inputList.Clear();
+        output = false;
+        finalOutput = false;
+        actionsCompleted = false;
+        nightOn = false;
+
+        foreach (GameObject site in outputSites)
+        {
+            site.SetActive(true);
+        }
+
+        foreach (GameObject site in inputSites)
+        {
+            site.SetActive(true);
+        }
+
+        Debug.Log(nodeName + " cleared successfully");
+    }
+
+    public void ClearNodeAfterVisit()
+    {
+        output = false;
+        actionsCompleted = false;
+        inputList.Clear();
+
+        Debug.Log(nodeName + "cleared after visit successfully");
+    }
+
 
     public void StartNight()
     {
@@ -119,7 +194,7 @@ public class CircuitNode : MonoBehaviour
         // move to topView camera
 
         // start circuit run
-        if (!gameManager.isDay)
+        if (!nightTimeGameManager.isDay)
         {
             StartCoroutine(CircuitRunRoutine());
         }
@@ -127,34 +202,56 @@ public class CircuitNode : MonoBehaviour
 
     IEnumerator CircuitRunRoutine()
     {
-        Debug.Log("CircuitRunRoutine: " + nodeName);
+        Debug.Log("CircuitRunRoutine Begin: " + nodeName);
         Debug.Log("Final output = " + finalOutput + ", " + nodeName);
+        Debug.Log("current inputs: ");
+        foreach (bool input in inputList)
+        {
+            Debug.Log(input);
+        }
         while (inputList.Count != inputMax)
         {
             yield return new WaitForSeconds(0.5f);
             continue;
         }
-        Debug.Log("out of loop");
-
-        thisGate.input1 = inputList[0];
-        thisGate.input2 = inputList[1];
+        Debug.Log(nodeName + "Received all inputs:");
+        foreach (bool input in inputList)
+        {
+            Debug.Log(nodeName + " input: " + input);
+        }
+        if (thisGate != null)
+        {
+            thisGate.input1 = inputList[0];
+            if (!isNotGate)
+            {
+                thisGate.input2 = inputList[1];
+            }
+            
+        }
+        
 
         bool newOutput = thisGate.PerformGateBehavior();
+
+        
         output = newOutput;
         Debug.Log(nodeName + " output: " + output);
 
         foreach (CircuitNode node in outputs)
         {
+            Debug.Log(nodeName + " adding value " + output + " to node: " + node.nodeName);
             node.AddInputValue(output);
         }
 
         if (finalOutput)
         {
-            Debug.Log("Final Output: " + output);
-            Debug.Log("The King wants: " + theKing.wantsGift);
-            Debug.Log("output == theKing.wantsGift: " + (output == theKing.wantsGift));
-            theKing.survivedNight = output == theKing.wantsGift;
+            Debug.Log("Final Node: "+nodeName+". Final Output: " + output);
+            Debug.Log("The King wants: " + nightTimeGameManager.kingWantsGift);
+            Debug.Log("output == theKing.wantsGift: " + (output == nightTimeGameManager.kingWantsGift));
+            nightTimeGameManager.finalOutput = output;
+            // theKing.survivedNight = output == theKing.wantsGift;
             // theKing.ready = "yes";
+
+            // judgementController.CalculateEndResults(output);
         }
         actionsCompleted = true;
         
