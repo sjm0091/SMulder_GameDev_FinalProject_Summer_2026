@@ -24,52 +24,70 @@ You speak to villagers who tell you to give them flowers. You walk around the ma
 Assets and References:
 
 Background Music:
+
 https://pixabay.com/music/solo-piano-atmospheric-nature-248011/
 
 UI Flowers:
+
 https://kenney.nl/assets/foliage-pack
 
 Fence:
+
 https://assetstore.unity.com/packages/3d/props/modular-self-stand-fence-105862
 
-Terrain
+Terrain:
+
 https://assetstore.unity.com/packages/3d/environments/landscapes/terrain-sample-asset-pack-145808#description
 
-Flowers
+Flowers:
+
 https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573
 
-Gates
+Gates:
+
 https://assetstore.unity.com/packages/3d/props/exterior/wooden-entrance-door-glass-window-297927
 
 Skybox:
 https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
 
-Environment
+Environment:
+
 https://assetstore.unity.com/packages/3d/environments/fantasy/idyllic-fantasy-nature-260042#content
 
 Villagers/Player:
+
 https://assetstore.unity.com/packages/3d/characters/humanoids/humans/low-poly-medieval-peasants-free-lowpoly-medieval-fantasy-series-122225
 
 Icons:
+
 https://assetstore.unity.com/packages/2d/gui/icons/modern-rpg-free-icons-pack-264706
+
 https://assetstore.unity.com/packages/2d/gui/icons/tiny-fantasy-icons-99722
 
 GUI:
+
 https://assetstore.unity.com/packages/2d/gui/icons/gui-parts-159068#description
 
 Font:
+
 https://assetstore.unity.com/packages/2d/gui/bloodlines-dark-ui-328721#description
 
 GUI Sounds:
+
 https://assetstore.unity.com/packages/audio/sound-fx/fantasy-menu-sfx-57238#content
+
 https://kenney.nl/assets/interface-sounds
 
 Animations:
+
 https://www.mixamo.com/#/?page=1&type=Motion%2CMotionPack
 
 
 
 Reference:
+
 https://docs.unity3d.com/6000.5/Documentation/ScriptReference/index.html
+
 https://docs.unity3d.com/Packages/com.unity.inputsystem@1.20/manual/index.html
+
 Class Videos
