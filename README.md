@@ -1,49 +1,75 @@
-Current title: Logically Pleasant Times
+Title: Logically Pleasant Times
+
 Concept:
-Goal is to please the king. There are characters scattered about that do different things. You get their approval and then arrange their tokens in a circuit in front of the gates. An enemy will come and destroy some of the gifts you've left, and gifts act as true, and lack of gifts act as false. 
-You must organize them (like logic gates) so that the gift
-reaches the king. In order to convince the characters to play their roles, you must give them gifts, such as flowers.
+Goal is to please the king. There are villagers scattered about that act like logic gates when placed in a circuit. You collect flowers for them and gain their approval and then arrange their spots in a circuit in front of the gates. A monster will come and eat some of the gifts that have been left. Gifts act as logical True and lack of gifts act as logical False.
+You must organize them (like logic gates) so that the King gets what he wants. The king will ask for something at different times "visits" during the night. Sometimes he wants a gift, and sometimes he doesn't. Your circuit must match his request for each visit.
 
-Controls: WASD, RVG are used for interacting, space/shift for jump and run, V, I, G, P, U, L used for interacting with items, Escape for menu, T for teleporting to circuit area
+Controls: WASD, RVG are used for interacting, space/shift for jump and run, 
+V - interact with villagers/flowers
+H - get villager introductions
+I - inventory
+G - give flowers to villager
+P - place wire end
+U - place villager spot
+C - place wire connecting wire ends
+L - set final node of circuit 
+Escape - menu
+T - for teleporting to circuit area
 
-Current objective: survive 5 nights without losing 3 times
-Aspiring objective: Befriend characters to arrange to bring gift to king and please king
+Objective: survive 5 nights without losing 3 times
 
-What is working in Checkpoint 1:
-  - Character movement (+ rotation and jumping)
-  - Camera following player in first person mode
-  - Terrain works
-  - Can collect flowers (not implemented into the ui yet)
-  - will receive interaction prompts from the flowers and wire
-  - if approach character, will see message
-  - can generate wire segments (not rotated correctly yet)
-  - can change day to night (Night mode will be different from day mode and it is not timed, thus the player controls day and night)
-  - game working
-  - character interaction
-  - circuit building
+How to play:
+You speak to villagers who tell you to give them flowers. You walk around the map, collecting flowers and give them to a villager and receive their token in return. Then you teleport to the gates. There you place the villager's tokens up like logic gates in order to make a circuit. You run the night and see if the king is pleased with you. First it will be a NAND circuit and then a NOT circuit and then generated at random. After the first two nights, new villagers will start appearing each day. You must not die 3 times, and the goal is to survive 5 times.
 
-Problems:
-- logic not working for King judging you
+Assets and References:
 
-Links to any external assets or resources used so far:
-Soundtrack (temporary): https://pixabay.com/music/solo-piano-atmospheric-nature-248011/
-Button click (not implemented yet): https://kenney.nl/assets/category:Audio
+Background Music:
+https://pixabay.com/music/solo-piano-atmospheric-nature-248011/
 
-https://kenney.nl/assets/foliage-pack - flowers (ui)
+UI Flowers:
+https://kenney.nl/assets/foliage-pack
+
+Fence:
+https://assetstore.unity.com/packages/3d/props/modular-self-stand-fence-105862
+
+Terrain
+https://assetstore.unity.com/packages/3d/environments/landscapes/terrain-sample-asset-pack-145808#description
+
+Flowers
+https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573
+
+Gates
+https://assetstore.unity.com/packages/3d/props/exterior/wooden-entrance-door-glass-window-297927
+
+Skybox:
+https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
+
+Environment
+https://assetstore.unity.com/packages/3d/environments/fantasy/idyllic-fantasy-nature-260042#content
+
+Villagers/Player:
+https://assetstore.unity.com/packages/3d/characters/humanoids/humans/low-poly-medieval-peasants-free-lowpoly-medieval-fantasy-series-122225
+
+Icons:
+https://assetstore.unity.com/packages/2d/gui/icons/modern-rpg-free-icons-pack-264706
+https://assetstore.unity.com/packages/2d/gui/icons/tiny-fantasy-icons-99722
+
+GUI:
+https://assetstore.unity.com/packages/2d/gui/icons/gui-parts-159068#description
+
+Font:
+https://assetstore.unity.com/packages/2d/gui/bloodlines-dark-ui-328721#description
+
+GUI Sounds:
+https://assetstore.unity.com/packages/audio/sound-fx/fantasy-menu-sfx-57238#content
+https://kenney.nl/assets/interface-sounds
+
+Animations:
+https://www.mixamo.com/#/?page=1&type=Motion%2CMotionPack
 
 
-https://assetstore.unity.com/packages/3d/props/modular-self-stand-fence-105862 - fence
 
-https://assetstore.unity.com/packages/3d/environments/landscapes/terrain-sample-asset-pack-145808#description - terrain
-
-
-https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573 - flowers
-
-
-https://assetstore.unity.com/packages/3d/props/exterior/wooden-entrance-door-glass-window-297927 - doors
-
-
-
-https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014 - sky
-
-https://assetstore.unity.com/packages/3d/environments/fantasy/idyllic-fantasy-nature-260042 - environment
+Reference:
+https://docs.unity3d.com/6000.5/Documentation/ScriptReference/index.html
+https://docs.unity3d.com/Packages/com.unity.inputsystem@1.20/manual/index.html
+Class Videos
