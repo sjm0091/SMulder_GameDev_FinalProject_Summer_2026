@@ -184,7 +184,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: ff1b67da7ac6b4afca1f66984b398bd3, type: 3}
+  characterSpot: {fileID: 462330040367203476, guid: ff1b67da7ac6b4afca1f66984b398bd3, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: ff1b67da7ac6b4afca1f66984b398bd3, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -193,10 +193,10 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
   myMapIcon: {fileID: 0}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: We're the ShareEverythingTwins. Give us one gift or two and we'll
+    pass a gift on. But give us nothing and we WON'T pass a gift on.
 --- !u!136 &438253120329352223
 CapsuleCollider:
   m_ObjectHideFlags: 0

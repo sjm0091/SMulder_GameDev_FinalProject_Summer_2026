@@ -182,7 +182,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: 58731b9d517174891926835fcd5d9b8e, type: 3}
+  characterSpot: {fileID: 2812378358652462054, guid: 58731b9d517174891926835fcd5d9b8e, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: 58731b9d517174891926835fcd5d9b8e, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -193,6 +193,8 @@ MonoBehaviour:
   myMapIcon: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: I'm TwoOrNothingTed. Give me two gifts and I'll pass a gift on.
+    Anything else and I WON'T pass a gift on.
 --- !u!1 &2638496288133843536
 GameObject:
   m_ObjectHideFlags: 0

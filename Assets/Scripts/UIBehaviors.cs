@@ -30,7 +30,7 @@ public class UIBehaviors : MonoBehaviour
     public void OnClickNextIntroMessage()
     {
         audioSource.PlayOneShot(ButtonClickClip);
-        if (introMessagesIndex > introMessages.Count)
+        if (introMessagesIndex >= introMessages.Count)
         {
             introMessages[introMessagesIndex - 1].SetActive(false);
             return;

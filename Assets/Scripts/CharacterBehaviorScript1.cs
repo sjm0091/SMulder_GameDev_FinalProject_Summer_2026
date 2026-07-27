@@ -34,6 +34,8 @@ public class CharacterBehaviorScript1 : MonoBehaviour
     public float terrainWidth;
     public float terrainLength;
 
+    public string introductionText;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -125,6 +127,14 @@ public class CharacterBehaviorScript1 : MonoBehaviour
 
         Debug.Log("messageText: " + messageText.gameObject.name);
         messageText.gameObject.SetActive(true);
+    }
+
+    public void Introduce(TextMeshProUGUI messageText)
+    {   
+        Debug.Log("introduce char");
+        messageText.text = introductionText;
+        messageText.gameObject.SetActive(true);
+        
     }
 
     public bool GiveGift(ItemData[] items, TextMeshProUGUI messageText)

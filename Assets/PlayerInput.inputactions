@@ -158,6 +158,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Introduce",
+                    "type": "Button",
+                    "id": "ad34b0a9-0641-486e-9231-eb77576498be",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -587,6 +596,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DeleteNode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a594348a-94e6-4e2f-9123-98b8082bce40",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Introduce",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

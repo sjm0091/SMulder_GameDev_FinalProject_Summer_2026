@@ -152,7 +152,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: 89a626affcdb447798ae7c85d48a21c1, type: 3}
+  characterSpot: {fileID: 6435640237291906093, guid: 89a626affcdb447798ae7c85d48a21c1, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: 89a626affcdb447798ae7c85d48a21c1, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -161,10 +161,10 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
   myMapIcon: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: We are the WeWantAllTheStuffBrothers. If you give us both a gift,
+    we'll pass a gift on. Anything else and we won't pass anything.
 --- !u!136 &8692079789650810110
 CapsuleCollider:
   m_ObjectHideFlags: 0

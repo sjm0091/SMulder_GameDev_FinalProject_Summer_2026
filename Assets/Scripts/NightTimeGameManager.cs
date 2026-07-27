@@ -51,6 +51,7 @@ public class NightTimeGameManager : MonoBehaviour
     // Audio
     public AudioSource audioSource;
     public AudioClip ButtonClickClip;
+    public AudioClip UIButtonClick;
 
 
     // Visits
@@ -493,7 +494,7 @@ public class NightTimeGameManager : MonoBehaviour
         {
             return;
         }
-        audioSource.PlayOneShot(ButtonClickClip);
+        audioSource.PlayOneShot(UIButtonClick);
 
         nightCamera.enabled = true;
         mainCamera.enabled = false;
@@ -559,7 +560,7 @@ public class NightTimeGameManager : MonoBehaviour
     // - disables kings message
     public void OnClickNextVisit()
     {
-        audioSource.PlayOneShot(ButtonClickClip);
+        audioSource.PlayOneShot(UIButtonClick);
 
         foreach (CircuitNode node in circuitNodes)
         {
@@ -587,7 +588,7 @@ public class NightTimeGameManager : MonoBehaviour
     // - starts day (function)
     public void OnClickNextDay()
     {
-        audioSource.PlayOneShot(ButtonClickClip);
+        audioSource.PlayOneShot(UIButtonClick);
         ClearCircuit();
         kingPleasedPerVisit = new List<bool>();
         // GenerateMonsters();
@@ -693,7 +694,7 @@ public class NightTimeGameManager : MonoBehaviour
 
     public void OnClickClearCircuit()
     {
-        audioSource.PlayOneShot(ButtonClickClip);
+        audioSource.PlayOneShot(UIButtonClick);
         ClearCircuit();
         wireScript.ClearArea();
         wireScript.numCharNodes = 0;

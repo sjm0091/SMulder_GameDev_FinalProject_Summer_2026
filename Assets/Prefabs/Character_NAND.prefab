@@ -151,7 +151,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: 74db3855e5f5c4339a5a56ce9a8de2ac, type: 3}
+  characterSpot: {fileID: -556922911161811418, guid: 74db3855e5f5c4339a5a56ce9a8de2ac, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: 74db3855e5f5c4339a5a56ce9a8de2ac, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -160,10 +160,11 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
   myMapIcon: {fileID: 0}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: We are the Don'tWannaBeTwins. We're twins, but we hate when people
+    give us the same stuff. If you one of us something, or give us nothing, we'll
+    pass a gift on. But if you give us BOTH a gift, we will NOT pass a gift on
 --- !u!136 &1676985557438080714
 CapsuleCollider:
   m_ObjectHideFlags: 0

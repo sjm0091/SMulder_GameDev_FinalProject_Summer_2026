@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 7638386560508183955}
   - component: {fileID: 4328592463746204711}
   - component: {fileID: -1748522384897951143}
+  - component: {fileID: -556922911161811418}
   m_Layer: 0
   m_Name: NANDCharacterSpotPrefab
   m_TagString: NonInteractable
@@ -229,6 +230,32 @@ MonoBehaviour:
   output: 0
   gateType: 0
   message: {fileID: 0}
+--- !u!114 &-556922911161811418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438235074443607832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d11644ca9d8418896e0fa3e343df7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
+  resource: characterSpot
+  itemData: {fileID: 11400000, guid: afa90a594fee549448d3d452d8acd4ab, type: 2}
+  amountPerCollect: 1
+  resourceCounter: {fileID: 0}
+  player: {fileID: 0}
+  maxDistance: 3
+  numWants: 0
+  currentlyHave: 0
+  itemIcon: {fileID: 21300000, guid: 510626f7f810b40daa8eabb570285275, type: 3}
+  maxStackAmount: 5
+  inventory: {fileID: 0}
+  mapIconPrefab: {fileID: 0}
+  myMapIcon: {fileID: 0}
+  mapCanvas: {fileID: 0}
 --- !u!1 &2069871796784988581
 GameObject:
   m_ObjectHideFlags: 0

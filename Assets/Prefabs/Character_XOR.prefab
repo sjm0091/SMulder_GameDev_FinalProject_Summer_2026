@@ -182,7 +182,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: b6ea97a7ff00a45358cf1b78c0a59f61, type: 3}
+  characterSpot: {fileID: 3422643236104628844, guid: b6ea97a7ff00a45358cf1b78c0a59f61, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: b6ea97a7ff00a45358cf1b78c0a59f61, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -191,10 +191,10 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 3879822603251357508, guid: 1d025f4b7613c4c89a883039651ba5c0, type: 3}
   myMapIcon: {fileID: 0}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: I'm OnlyOnePleaseOlly. If you give me ONE gift I'll pass a gift
+    on. But if you give me TWO or NONE, I will NOT pass a gift on.
 --- !u!1 &2638496288133843536
 GameObject:
   m_ObjectHideFlags: 0

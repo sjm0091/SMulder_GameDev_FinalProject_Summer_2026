@@ -150,7 +150,7 @@ MonoBehaviour:
   waitingText: 'Do you have my flowers? (Give: [G])'
   happyText: Thanks! I'll do as you ask!
   promptText: 'Talk [V]'
-  characterSpot: {fileID: 300092128632550173, guid: 912cde7d6514f44718aa569906d628ab, type: 3}
+  characterSpot: {fileID: 3684995965788288213, guid: 912cde7d6514f44718aa569906d628ab, type: 3}
   charSpotPrefab: {fileID: 1438235074443607832, guid: 912cde7d6514f44718aa569906d628ab, type: 3}
   itemsWanted:
   - {fileID: 11400000, guid: 77ac67998f1ff4a0ea723045a120c26d, type: 2}
@@ -159,10 +159,10 @@ MonoBehaviour:
   currText: 
   mapIconPrefab: {fileID: 8646859186836170816, guid: 44e707ed9638041a4899eed372778a5d, type: 3}
   myMapIcon: {fileID: 0}
-  canvasCamera: {fileID: 0}
-  mapCanvas: {fileID: 0}
   terrainWidth: 0
   terrainLength: 0
+  introductionText: I'm Don'tLikeGiftsDanny. If you give me one gift or two gifts,
+    I WON'T pass a gift on. I will pass a gift on if I receive NO gifts.
 --- !u!1 &2638496288133843536
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,12 @@ public class PlayerInteractionScript : MonoBehaviour
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI promptText;
     public GameObject promptTextPanel;
+
+    public TextMeshProUGUI introduceText;
+    public GameObject introduceTextPanel;
+
     public string currentCharMessage = "Talk [E]";
+    public string currentIntroduceText = "";
     public bool talking;
     public InteractableObject currentItem;
 
@@ -230,7 +235,6 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             // Debug.Log("current Item");
             promptText.text = "Press V To Interact";
-            
             promptText.gameObject.SetActive(true);
             promptTextPanel.SetActive(true);
             // Debug.Log(promptText.text);
@@ -243,12 +247,17 @@ public class PlayerInteractionScript : MonoBehaviour
             // if (promptText.text != currentChar.promptText && promptText.text != currentChar.happyText && promptText.text != currentChar.waitingText && promptText.text != currentChar.queryingText)
             // {
             if (!talking) {
+                introduceText.text = "";
+                introduceText.gameObject.SetActive(true);
+                introduceTextPanel.SetActive(true);
+
                 promptText.text = currentChar.promptText;
                 promptText.gameObject.SetActive(true);
                 promptTextPanel.SetActive(true);
             } else
             {
                 promptText.text = currentCharMessage;
+                introduceText.text = currentIntroduceText;
             }
             
             
@@ -257,6 +266,8 @@ public class PlayerInteractionScript : MonoBehaviour
         {
             promptText.gameObject.SetActive(false);
             promptTextPanel.SetActive(false);
+            introduceText.gameObject.SetActive(false);
+            introduceTextPanel.SetActive(false);
             talking = false;
             // Debug.Log("curr char is null & curr item is null: setting prompt text false");
         }
@@ -290,6 +301,7 @@ public class PlayerInteractionScript : MonoBehaviour
             // Debug.Log("hit: " + hit);
 
             messageText = script.message;
+            
 
             GameObject hitChar = hit.gameObject;
             float distance = Vector3.Distance(transform.position, hitChar.transform.position);
@@ -318,18 +330,26 @@ public class PlayerInteractionScript : MonoBehaviour
             // Debug.Log("current item is null or isInteracting");
             return;
         }
-        audioSource.PlayOneShot(TalkClip);
+
+        if (currentItem != null && currentItem.GetComponent<GateBehaviorScript>() != null)
+        {
+            return;
+        }
+        
 
         
         
 
         if(charInteraction)
         {
+            audioSource.PlayOneShot(TalkClip);
             // Debug.Log("char interaction routine");
             charInteraction = false;
+
             StartCoroutine(CharInteractRoutine());
         } else
         {
+            audioSource.PlayOneShot(CollectClip);
             StartCoroutine(ItemInteractRoutine());
         }
 
@@ -600,6 +620,62 @@ public class PlayerInteractionScript : MonoBehaviour
         }
     }
 
+    public void OnIntroduce(InputValue value)
+    {
+        if (!value.isPressed)
+        {
+            return;
+        }
+
+        // Debug.Log("On Interact triggered");
+
+        if (!value.isPressed)
+        {
+            // Debug.Log("value was not pressed");
+            return;
+        }
+
+        if ((currentChar == null && currentItem == null) || isInteracting)
+        {
+            // Debug.Log("current item is null or isInteracting");
+            return;
+        }
+
+        if (currentItem != null && currentItem.GetComponent<GateBehaviorScript>() != null)
+        {
+            return;
+        }
+        Debug.Log("Introduce");
+        
+
+        
+        
+
+        
+        audioSource.PlayOneShot(TalkClip);
+        // Debug.Log("char interaction routine");
+        // charInteraction = false;
+
+        StartCoroutine(IntroduceRoutine());
+        
+
+        
+
+
+    }
+
+    private IEnumerator IntroduceRoutine()
+    {
+        // talking = true;
+        // currentItem = null;
+        // currentIntroduceText = currentChar.currText;
+        currentChar.Introduce(introduceText);
+        currentIntroduceText = currentChar.introductionText;
+        // currentChar = null;
+
+        yield return null;
+    }
+
     private IEnumerator CharInteractRoutine()
     {
         talking = true;
@@ -629,7 +705,7 @@ public class PlayerInteractionScript : MonoBehaviour
             promptTextPanel.SetActive(false);
             // Debug.Log("item interact routine set active false");
         }
-        audioSource.PlayOneShot(CollectClip);
+        
 
     
         currentChar = null;
